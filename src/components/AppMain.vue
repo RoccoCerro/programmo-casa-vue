@@ -1,7 +1,12 @@
 <template>
 
   <div class="container">
-    <p><a href="http://127.0.0.1:8000/login">Accedi alla tua pagina personale</a></p>
+    <p>
+      <a href="http://127.0.0.1:8000/login">
+        <font-awesome-icon :icon="['fas', 'user']" />
+        Accedi alla tua pagina personale
+      </a>
+    </p>
     <p><a href="http://127.0.0.1:8000/register">Registrati</a></p>
     
     <h2 class="text-2xl my-8">Ecco i nostri appartamenti</h2>
