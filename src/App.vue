@@ -1,21 +1,22 @@
 <script>
 // import { defineAsyncComponent } from 'vue';
-import AppMain from './components/AppMain.vue';
+import AppHeader from './components/AppHeader.vue';
 
 export default {
   components: {
-    AppMain
+    AppHeader
   },
   data() {
     return {
-      message: 'Ciao mondo'
+      
     }
   }
 }
 </script>
 
 <template>
-  <AppMain />
+  <AppHeader />
+  <RouterView />
 </template>
 
 <style lang="scss">
