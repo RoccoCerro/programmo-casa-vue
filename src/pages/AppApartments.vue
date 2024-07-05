@@ -12,7 +12,7 @@
     <div class="row flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-for="apartment in apartments" class="col">
         <div class="card">
-          <img :src="apartment.img_apartment" class="card-img-top" alt="">
+          <img :src="'http://127.0.0.1:8000/storage/'+apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
           </div>
