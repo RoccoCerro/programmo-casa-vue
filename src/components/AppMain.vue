@@ -1,5 +1,9 @@
 <template>
+
   <div class="container">
+    <p><a href="http://127.0.0.1:8000/login">Accedi alla tua pagina personale</a></p>
+    <p><a href="http://127.0.0.1:8000/register">Registrati</a></p>
+    
     <h2 class="text-2xl my-8">Ecco i nostri appartamenti</h2>
     <ul class="grid grid-cols-3 gap-4">
       <li class="border p-4 shadow-lg rounded-lg" v-for="apartment in apartments" :key="apartment.id">
