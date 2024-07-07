@@ -10,6 +10,11 @@
   </div>
   <div class="container">
     <div class="row flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
+      <form class="form-search-apartment"action="">
+
+      </form>
+
+
       <div v-for="apartment in apartments" class="col">
         <div class="card">
           <img :src="'http://127.0.0.1:8000/storage/'+apartment.img_apartment" class="card-img-top" alt="">
