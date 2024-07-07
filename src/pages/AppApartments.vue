@@ -8,13 +8,18 @@
       </li>
     </ul> -->
   </div>
+
+  <div class="container search-bar">
+    <form class="form-search-apartment my-3"action="">
+      <label for="complete_address" class="form-label">Cerca dove vorresti trovare un appartamento</label>
+      <input type="text" class="form-control my-input-address" id="complete_address" name="complete_address" value="" required placeholder="Inserisci la Via e scegli tra quelle suggerite">
+    </form>
+
+    <hr>
+  </div>
+
   <div class="container">
     <div class="row flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <form class="form-search-apartment"action="">
-
-      </form>
-
-
       <div v-for="apartment in apartments" class="col">
         <div class="card">
           <img :src="'http://127.0.0.1:8000/storage/'+apartment.img_apartment" class="card-img-top" alt="">
