@@ -10,8 +10,12 @@
   </div>
 
   <div class="container search-bar">
-    <form class="form-search-apartment my-3"action="">
-      <label for="complete_address" class="form-label">Cerca dove vorresti trovare un appartamento</label>
+    <form class="form-search-latitude my-3"action="">
+      <label for="complete_address" class="form-label">Inserisci la latitudine</label>
+      <input type="text" class="form-control my-input-address" id="complete_address" name="complete_address" value="" required placeholder="Inserisci la Via e scegli tra quelle suggerite">
+      <label for="complete_address" class="form-label">Inserisci la longitudine</label>
+      <input type="text" class="form-control my-input-address" id="complete_address" name="complete_address" value="" required placeholder="Inserisci la Via e scegli tra quelle suggerite">
+      <label for="complete_address" class="form-label">Inserisci la distanza in Chilometri</label>
       <input type="text" class="form-control my-input-address" id="complete_address" name="complete_address" value="" required placeholder="Inserisci la Via e scegli tra quelle suggerite">
     </form>
 
@@ -34,13 +38,25 @@
 
 <script>
 import axios from 'axios'
+// import useMath from '@vueuse/math'
+
 
 export default {
   data() {
     return {
       apartments: [],
       currentPage: 1,
-      lastPage: null
+      lastPage: null,
+      // i set the datas used to calculate the bounds
+      latitude: 45.482516,
+      longitude: 9.168860,
+      distance: 20,
+      bounds: {
+        latMin: 0,
+        latMax: 0,
+        lonMin: 0,
+        lonMax: 0,
+      }
     }
   },
   methods: {
@@ -64,10 +80,30 @@ export default {
         this.lastPage = res.data.results.last_page
       })
 
+    },
+    // this function takes latitude, longitude, distance in kilometers and calculates the bounds
+    calculateBoundingBox(lat, lon, distanceKm){
+      // i create the constances that i will use
+      const kmPerDegreeLat = 110.574;
+      const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180));
+
+      // i calculate the bounds
+      const latMin = lat - (distanceKm / kmPerDegreeLat);
+      const latMax = lat + (distanceKm / kmPerDegreeLat);
+      const lonMin = lon - (distanceKm / kmPerDegreeLon);
+      const lonMax = lon + (distanceKm / kmPerDegreeLon);
+
+      // i pass the results to my datas
+      this.bounds.latMin = latMin;
+      this.bounds.latMax = latMax;
+      this.bounds.lonMin = lonMin;
+      this.bounds.lonMax = lonMax;
+
     }
   },
   created() {
-    this.fetchApartments()
+    this.fetchApartments();
+    this.calculateBoundingBox(this.latitude, this.longitude, this.distance)
   },
 }
 </script>
