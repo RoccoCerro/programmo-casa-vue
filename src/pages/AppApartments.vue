@@ -12,25 +12,33 @@
   <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
   <div class="container mt-3 mb-3 text-center">
     <h1>appartamenti in evidenza</h1>
-    <div class="row gy-3 gx-3 mb-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
+    <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-for="apartment in apartments">
-      <!-- mostriamo gli appartamenti in evidenza -->
-      <div class="_apartemnt-evidence "> 
-        <div class="card">
+        <!-- mostriamo gli appartamenti in evidenza -->
+
+        <div class="card h-100">
           <div class="card-header">
             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
 
           </div>
-          {{ apartment.sponsorships.apartment_id }}
-
+          <div class="card-body">
+            {{ apartment.sponsorships.apartment_id }}
+            <p>
+              {{
+                  apartment.title_apartment
+               }}
+            </p>
           </div>
+
         </div>
       </div>
+
     </div>
   </div>
 
 
   <div class="container">
+    <h1>Altri appartamenti</h1>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-for="apartment in apartments">
         <div class="card h-100">
