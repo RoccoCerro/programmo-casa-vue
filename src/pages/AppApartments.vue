@@ -1,12 +1,12 @@
 <template>
-   <div class="container">
+  <div class="container">
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
-    <!-- <ul class="grid grid-cols-3 gap-4">
-      <li class="border p-4 shadow-lg rounded-lg" v-for="apartment in apartments" :key="apartment.id">
-        <h2 class="text-lg text-amber-400 font-medium">{{ apartment.title_apartment }}</h2>
-        <p class="text-sm">{{  apartment.user.name }}</p>
-      </li>
-    </ul> -->
+    <div>
+      <form class="d-flex" role="search" @submit.prevent="searchForZone">
+        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
+        <button class="btn btn-outline-dark" type="submit">Cerca</button>
+      </form>
+    </div>
   </div>
 
   <div class="container search-bar">
@@ -33,9 +33,18 @@
 
   <div class="container">
     <div class="row flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div v-for="apartment in apartments" class="col">
+      <div v-if="zone === ''" v-for="apartment in apartments" class="col">
         <div class="card">
           <img :src="'http://127.0.0.1:8000/storage/'+apartment.img_apartment" class="card-img-top" alt="">
+          <div class="card-body">
+            <p class="card-text">{{ apartment.title_apartment }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div v-else v-for="apartment in apartmentsResearch" class="col">
+        <div class="card">
+          <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
           </div>
@@ -53,6 +62,8 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      zone:'',
+      apartmentsResearch: '',
       apartments: [],
       currentPage: 1,
       lastPage: null,
@@ -84,11 +95,27 @@ export default {
       })
       .then((res) => {
         // console.log(res.data.posts) // senza la paginazione
-        console.log(res.data.results.data)
+        // console.log(res.data.results.data)
         this.apartments = res.data.results.data
         this.lastPage = res.data.results.last_page
       })
 
+    },
+    searchForZone() {
+      axios.get('http://127.0.0.1:8000/api/search',{
+        params: {
+          page: this.currentPage,
+          zone: this.zone
+          // perPage: 9
+        }
+      })
+      .then((res) => {
+        
+        this.apartmentsResearch = res.data;
+        console.log(res.data)
+        console.log(this.zone)
+        console.log('arrey ricerca' + this.apartmentsResearch)
+      })
     },
     // this function takes latitude, longitude, distance in kilometers and calculates the bounds
     calculateLimitsLatLon(){
@@ -118,7 +145,7 @@ export default {
   created() {
     this.fetchApartments();
     this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
-  },
+  }
 }
 </script>
 
