@@ -10,7 +10,7 @@
   </div>
 
   <div class="container search-bar">
-    <form class="form-search-latitude my-3"action="">
+    <form class="form-search-latitude my-3" action="">
       <label for="complete_address" class="form-label">Inserisci la latitudine</label>
       <input v-model.number="latitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
       <label for="complete_address" class="form-label">Inserisci la longitudine</label>
