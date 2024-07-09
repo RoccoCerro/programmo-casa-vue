@@ -7,8 +7,8 @@
         <!-- @keyup="fetchSuggestions"  -->
         <button class="btn btn-outline-dark" type="submit">Cerca</button>
       </form>
-      <ul class="suggestions list-unstyled">
-        <li v-for="(suggestion, i) in suggestions" class="" @click="selectSuggestion(suggestion)">
+      <ul v-if="zone" class="suggestions list-unstyled">
+        <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
           {{ suggestion.address.freeformAddress }}
         </li>
       </ul>
@@ -209,4 +209,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use '../style/partials/app-apartments';
+</style>
