@@ -3,9 +3,15 @@
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
       <form class="d-flex" role="search" @submit.prevent="searchForZone">
-        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
+        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="fetchSuggestions">
+        <!-- @keyup="fetchSuggestions"  -->
         <button class="btn btn-outline-dark" type="submit">Cerca</button>
       </form>
+      <ul class="suggestions list-unstyled">
+        <li v-for="suggestion in suggestions">
+          {{ suggestion.address.freeformAddress }}
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -47,8 +53,8 @@
             {{ apartment.sponsorships.apartment_id }}
             <p>
               {{
-                  apartment.title_apartment
-               }}
+                apartment.title_apartment
+              }}
             </p>
           </div>
 
@@ -81,28 +87,18 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
 </template>
 
 <script>
+// var  _ =  require ( 'lodash' );
 import axios from 'axios'
 // import useMath from '@vueuse/math'
-
 
 export default {
   data() {
     return {
       zone:'',
+      suggestions:[],
       apartmentsResearch: '',
       apartments: [],
       currentPage: 1,
@@ -124,6 +120,19 @@ export default {
       if (n === this.currentPage) return
       this.currentPage = n
       this.fetchPosts()
+    },
+    fetchSuggestions(){
+      axios.get('http://127.0.0.1:8000/api/suggestions', {
+        params: {
+          page: this.currentPage,
+          parametro: this.zone,
+          // perPage: 9
+        }
+      })
+      .then((res) => {
+        this.suggestions = res.data.response.results
+        console.log(res.data.response.results)
+      })
     },
     fetchApartments() {
 
