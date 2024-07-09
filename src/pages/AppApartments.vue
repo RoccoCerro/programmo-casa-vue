@@ -5,7 +5,9 @@
       <form class="d-flex" role="search" @submit.prevent="searchForZone">
         <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="fetchSuggestions">
         <!-- @keyup="fetchSuggestions"  -->
-        <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
+          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <!-- </RouterLink> -->
       </form>
       <ul v-if="zone" class="suggestions list-unstyled">
         <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
@@ -93,6 +95,7 @@
 // var  _ =  require ( 'lodash' );
 import axios from 'axios'
 // import useMath from '@vueuse/math'
+import AppAdvancedSearch from './AppAdvancedSearch.vue';
 
 export default {
   data() {
@@ -114,6 +117,9 @@ export default {
         lonMax: 0,
       }
     }
+  },
+  components:{
+    AppAdvancedSearch
   },
   methods: {
     changePage(n) {
