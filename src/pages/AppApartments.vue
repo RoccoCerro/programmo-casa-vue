@@ -8,7 +8,7 @@
         <button class="btn btn-outline-dark" type="submit">Cerca</button>
       </form>
       <ul class="suggestions list-unstyled">
-        <li v-for="suggestion in suggestions">
+        <li v-for="(suggestion, i) in suggestions" class="" @click="selectSuggestion(suggestion)">
           {{ suggestion.address.freeformAddress }}
         </li>
       </ul>
@@ -104,8 +104,8 @@ export default {
       currentPage: 1,
       lastPage: null,
       // i set the datas used to calculate the bounds
-      latitude: 45.482516,
-      longitude: 9.168860,
+      latitude: 0,
+      longitude: 0,
       distance: 20,
       bounds: {
         latMin: 0,
@@ -153,8 +153,11 @@ export default {
     searchForZone() {
       axios.get('http://127.0.0.1:8000/api/search',{
         params: {
-          page: this.currentPage,
-          zone: this.zone
+          // page: this.currentPage,
+          min_lat: this.bounds.latMin,
+          max_lat: this.bounds.latMax,
+          min_lon: this.bounds.lonMin,
+          max_lon: this.bounds.lonMax
           // perPage: 9
         }
       })
@@ -165,6 +168,14 @@ export default {
         console.log(this.zone)
         console.log('arrey ricerca' + this.apartmentsResearch)
       })
+    },
+    selectSuggestion(el){
+      this.zone = el.address.freeformAddress
+      this.suggestions = ''
+
+      this.latitude = el.position.lat
+      this.longitude = el.position.lon
+      this.calculateLimitsLatLon()
     },
     // this function takes latitude, longitude, distance in kilometers and calculates the bounds
     calculateLimitsLatLon(){
