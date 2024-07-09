@@ -2,9 +2,9 @@
   <div class="container">
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
-      <form class="d-flex" role="search" @submit.prevent="searchForZone">
+      <form class="d-flex" role="search" @submit.prevent="[calculateLimitsLatLon, searchForZone]">
         <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
-        <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <button class="btn btn-outline-dark"  type="submit">Cerca</button>
       </form>
     </div>
   </div>
@@ -38,7 +38,7 @@
       <div v-for="apartment in apartments">
         <!-- mostriamo gli appartamenti in evidenza -->
 
-        <div class="card h-100">
+        <router-link :to="'/apartment'" class="card h-100"  @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
           <div class="card-header">
             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
 
@@ -52,7 +52,7 @@
             </p>
           </div>
 
-        </div>
+        </router-link>
       </div>
 
     </div>
@@ -63,12 +63,12 @@
     <h1>Altri appartamenti</h1>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-if="zone === ''" v-for="apartment in apartments">
-        <div class="card h-100">
+        <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
           <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
           </div>
-        </div>
+        </router-link>
       </div>
 
       <div v-else v-for="apartment in apartmentsResearch" class="col">
@@ -87,7 +87,17 @@
 
 
 
+  <!-- // Save data to sessionStorage
+sessionStorage.setItem("key", "value");
 
+// Get saved data from sessionStorage
+let data = sessionStorage.getItem("key");
+
+// Remove saved data from sessionStorage
+sessionStorage.removeItem("key");
+
+// Remove all saved data from sessionStorage
+sessionStorage.clear(); -->
 
 
 
@@ -120,6 +130,21 @@ export default {
     }
   },
   methods: {
+    bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
+      // console.log(id)
+      sessionStorage.setItem("apartmentId", id);
+      sessionStorage.setItem("titleApartment", titleApartment);
+      sessionStorage.setItem("rooms", rooms);
+      sessionStorage.setItem("beds", beds);
+      sessionStorage.setItem("bathrooms", bathrooms);
+      sessionStorage.setItem("sqrMeters", sqrMeters);
+      sessionStorage.setItem("imgApartment", imgApartment);
+      sessionStorage.setItem("description", description);
+      sessionStorage.setItem("latitude", latitude);
+      sessionStorage.setItem("longitude", longitude);
+      sessionStorage.setItem("completeAddress", completeAddress);
+      router.push({ path: 'apartment' })
+    },
     changePage(n) {
       if (n === this.currentPage) return
       this.currentPage = n
@@ -163,8 +188,8 @@ export default {
       const lon = this.longitude;
       const distanceKm = this.distance;
       // i create the constances that i will use
-      const kmPerDegreeLat = 110.574;
-      const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180));
+      const kmPerDegreeLat = 110.574; // chilometri per angolo di latitudine
+      const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180)); // chilometri per angolo di longitudine
 
     console.log(lat);
 

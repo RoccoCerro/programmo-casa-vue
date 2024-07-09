@@ -30,10 +30,13 @@
    <h5>Tel: </h5><p>{{ phone_number }}</p>
    <h5>Messaggio: </h5><p>{{ text }}</p>
  </div>
+
+ <AppMessageSuccess />
 </template>
 
 <script>
 import axios from 'axios'
+import AppMessageSuccess from '../components/AppMessageSuccess.vue'
 
 
 export default {
@@ -63,7 +66,8 @@ export default {
       surname: this.surname,
       email_sender: this.email_sender,
       text: this.text,
-      phone_number: this.phone_number
+      phone_number: this.phone_number,
+      apartment_id: sessionStorage.getItem("apartmentId"),
 }})
   .then(function (response) {
     console.log(response);
@@ -75,6 +79,9 @@ export default {
      this.fetchPosts()
    }
   
+ },
+ components:{
+  AppMessageSuccess,
  },
  created() {
   //  this.fetchApartments();
