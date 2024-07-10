@@ -10,6 +10,10 @@
       </li>
     </ul>
 
+    <div class="services">
+      <button :class="('btn btn-primary me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
+    </div>
+
     <!-- {{ latitude }} {{ longitude  }} -->
 
     <div class="container search-bar">
@@ -49,6 +53,9 @@
         latitude: 0,
         longitude: 0,
         distance: 20,
+        buttonColors: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'],
+        services: {},
+        activeFilters: [],
         bounds: {
           latMin: 0,
           latMax: 0,
@@ -81,6 +88,37 @@
         this.bounds.lonMin = lonMin;
         this.bounds.lonMax = lonMax;
 
+      },
+      fetchServices(){
+        axios.get('http://127.0.0.1:8000/api/services')
+      .then((res) => {
+        this.services = res.data.results
+        console.log(this.services[0])
+      })
+      },
+      toggleService(serviceId){
+
+        const _this = this;
+        const id = serviceId;
+
+        if(this.activeFilters.includes(id)){
+           let index = _this.activeFilters.indexOf(serviceId);
+          this.activeFilters.splice(index, 1);
+        }else{
+          this.activeFilters.push(serviceId);
+        }
+        
+        console.log(this.activeFilters);
+      },
+      buttonToggle(serviceId){
+        const button = document.querySelector('.service-'+serviceId);
+        if(this.activeFilters.includes(serviceId)){
+          button.classList.remove('btn-primary');
+          button.classList.add('btn-secondary');
+        }else{
+          button.classList.remove('btn-secondary');
+          button.classList.add('btn-primary');
+        }
       }
     },
     mounted(){
@@ -88,6 +126,7 @@
       this.latitude = parseFloat(sessionStorage.getItem('latitude'))
       this.longitude = parseFloat(sessionStorage.getItem('longitude'))
       this.calculateLimitsLatLon()
+      this.fetchServices()
 
       // this.latitude = el.position.lat
       // this.longitude = el.position.lon
