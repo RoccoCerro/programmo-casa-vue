@@ -45,24 +45,18 @@
     <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-for="apartment in apartments">
         <!-- mostriamo gli appartamenti in evidenza -->
-
-        <router-link :to="'/apartment'" class="card h-100"  @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
           <div class="card-header">
             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
-
           </div>
           <div class="card-body">
             {{ apartment.sponsorships.apartment_id }}
-            <p>
-              {{
-                apartment.title_apartment
-              }}
-            </p>
+            <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
+              <p>
+                {{ apartment.title_apartment }}
+              </p>
+            </RouterLink>
           </div>
-
-        </router-link>
       </div>
-
     </div>
   </div>
 
@@ -71,12 +65,12 @@
     <h1>Altri appartamenti</h1>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-if="zone === ''" v-for="apartment in apartments">
-        <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
+        <!-- <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)"> -->
           <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
           </div>
-        </router-link>
+        <!-- </router-link> -->
       </div>
 
       <!-- <div v-else v-for="apartment in apartmentsResearch" class="col">
@@ -189,7 +183,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }, 500), // Ritarda la chiamata di 500ms
+    }, 500),
     fetchApartments() {
 
       axios.get('http://127.0.0.1:8000/api/apartments', {
@@ -199,31 +193,12 @@ export default {
         }
       })
         .then((res) => {
-          // console.log(res.data.posts) // senza la paginazione
-          // console.log(res.data.results.data)
           this.apartments = res.data.results.data
           this.lastPage = res.data.results.last_page
         })
 
     },
     searchForZone() {
-      // axios.get('http://127.0.0.1:8000/api/search',{
-      //   params: {
-      //     // page: this.currentPage,
-      //     min_lat: this.bounds.latMin,
-      //     max_lat: this.bounds.latMax,
-      //     min_lon: this.bounds.lonMin,
-      //     max_lon: this.bounds.lonMax
-      //     // perPage: 9
-      //   }
-      // })
-      // .then((res) => {
-        
-      //   this.apartmentsResearch = res.data;
-      //   console.log(res.data)
-      //   console.log(this.zone)
-      //   console.log('arrey ricerca' + this.apartmentsResearch)
-      // })
       sessionStorage.setItem('zone', this.zone);
       this.$router.push('/advanced-search')
     },
@@ -233,38 +208,11 @@ export default {
 
       sessionStorage.setItem('latitude', el.position.lat);
       sessionStorage.setItem('longitude', el.position.lon);
-      // this.latitude = parseFloat(el.position.lat)
-      // this.longitude = parseFloat(el.position.lon)
-      // this.calculateLimitsLatLon()
+      
     },
-    // // this function takes latitude, longitude, distance in kilometers and calculates the bounds
-    // calculateLimitsLatLon(){
-    //   const lat = this.latitude;
-    //   const lon = this.longitude;
-    //   const distanceKm = this.distance;
-    //   // i create the constances that i will use
-    //   const kmPerDegreeLat = 110.574; // chilometri per angolo di latitudine
-    //   const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180)); // chilometri per angolo di longitudine
-
-    // console.log(lat);
-
-    //   // // i calculate the bounds
-    //     const latMin = lat - (distanceKm / kmPerDegreeLat);
-    //     const latMax = lat + (distanceKm / kmPerDegreeLat);
-    //     const lonMin = lon - (distanceKm / kmPerDegreeLon);
-    //     const lonMax = lon + (distanceKm / kmPerDegreeLon);
-
-    //   // // i pass the results to my datas
-    //   this.bounds.latMin = latMin;
-    //   this.bounds.latMax = latMax;
-    //   this.bounds.lonMin = lonMin;
-    //   this.bounds.lonMax = lonMax;
-
-    // }
   },
   created() {
     this.fetchApartments();
-    // this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
   }
 }
 </script>

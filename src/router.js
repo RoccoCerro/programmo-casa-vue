@@ -11,9 +11,10 @@ const router = createRouter({
   routes:[
     { path: '/', name: 'home', component: AppHome },
     { path: '/apartments', name: 'apartments', component: AppApartments },
+    { path: '/apartments/:id', name: 'apartment.show', component: AppApartment, props: true},
     { path: '/messages', name: 'messages', component: AppMessages },
     { path: '/advanced-search', name: 'advanced-search', component: AppAdvancedSearch },
-    { path: '/apartment', name: 'apartment', component: AppApartment },
+    // { path: '/apartment', name: 'apartment', component: AppApartment },
 
 
   ]
