@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="container search-bar">
+  <!-- <div class="container search-bar">
     <form class="form-search-latitude my-3" action="">
       <label for="complete_address" class="form-label">Inserisci la latitudine</label>
       <input v-model.number="latitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
@@ -37,7 +37,7 @@
     </div>
 
     <hr>
-  </div>
+  </div> -->
 
   <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
   <div class="container mt-3 mb-3 text-center">
@@ -79,14 +79,14 @@
         </router-link>
       </div>
 
-      <div v-else v-for="apartment in apartmentsResearch" class="col">
+      <!-- <div v-else v-for="apartment in apartmentsResearch" class="col">
         <div class="card">
           <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -116,31 +116,27 @@ sessionStorage.clear(); -->
 // var  _ =  require ( 'lodash' );
 import axios from 'axios'
 // import useMath from '@vueuse/math'
-import AppAdvancedSearch from './AppAdvancedSearch.vue';
 
 export default {
   data() {
     return {
       zone:'',
       suggestions:[],
-      apartmentsResearch: '',
       apartments: [],
+      // apartmentsResearch: '',
       currentPage: 1,
       lastPage: null,
       // i set the datas used to calculate the bounds
-      latitude: 0,
-      longitude: 0,
-      distance: 20,
-      bounds: {
-        latMin: 0,
-        latMax: 0,
-        lonMin: 0,
-        lonMax: 0,
-      }
+      // latitude: 0,
+      // longitude: 0,
+      // distance: 20,
+      // bounds: {
+      //   latMin: 0,
+      //   latMax: 0,
+      //   lonMin: 0,
+      //   lonMax: 0,
+      // }
     }
-  },
-  components:{
-    AppAdvancedSearch
   },
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
@@ -173,7 +169,7 @@ export default {
       })
       .then((res) => {
         this.suggestions = res.data.response.results
-        console.log(res.data.response.results)
+        console.log('questo è il res di suggestion',res.data.response.results)
       })
     },
     fetchApartments() {
@@ -193,60 +189,64 @@ export default {
 
     },
     searchForZone() {
-      axios.get('http://127.0.0.1:8000/api/search',{
-        params: {
-          // page: this.currentPage,
-          min_lat: this.bounds.latMin,
-          max_lat: this.bounds.latMax,
-          min_lon: this.bounds.lonMin,
-          max_lon: this.bounds.lonMax
-          // perPage: 9
-        }
-      })
-      .then((res) => {
+      // axios.get('http://127.0.0.1:8000/api/search',{
+      //   params: {
+      //     // page: this.currentPage,
+      //     min_lat: this.bounds.latMin,
+      //     max_lat: this.bounds.latMax,
+      //     min_lon: this.bounds.lonMin,
+      //     max_lon: this.bounds.lonMax
+      //     // perPage: 9
+      //   }
+      // })
+      // .then((res) => {
         
-        this.apartmentsResearch = res.data;
-        console.log(res.data)
-        console.log(this.zone)
-        console.log('arrey ricerca' + this.apartmentsResearch)
-      })
+      //   this.apartmentsResearch = res.data;
+      //   console.log(res.data)
+      //   console.log(this.zone)
+      //   console.log('arrey ricerca' + this.apartmentsResearch)
+      // })
+      sessionStorage.setItem('zone', this.zone);
+      this.$router.push('/advanced-search')
     },
     selectSuggestion(el){
       this.zone = el.address.freeformAddress
       this.suggestions = ''
 
-      this.latitude = el.position.lat
-      this.longitude = el.position.lon
-      this.calculateLimitsLatLon()
+      sessionStorage.setItem('latitude', el.position.lat);
+      sessionStorage.setItem('longitude', el.position.lon);
+      // this.latitude = parseFloat(el.position.lat)
+      // this.longitude = parseFloat(el.position.lon)
+      // this.calculateLimitsLatLon()
     },
-    // this function takes latitude, longitude, distance in kilometers and calculates the bounds
-    calculateLimitsLatLon(){
-      const lat = this.latitude;
-      const lon = this.longitude;
-      const distanceKm = this.distance;
-      // i create the constances that i will use
-      const kmPerDegreeLat = 110.574; // chilometri per angolo di latitudine
-      const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180)); // chilometri per angolo di longitudine
+    // // this function takes latitude, longitude, distance in kilometers and calculates the bounds
+    // calculateLimitsLatLon(){
+    //   const lat = this.latitude;
+    //   const lon = this.longitude;
+    //   const distanceKm = this.distance;
+    //   // i create the constances that i will use
+    //   const kmPerDegreeLat = 110.574; // chilometri per angolo di latitudine
+    //   const kmPerDegreeLon = 111.320 * Math.cos(lat * (Math.PI / 180)); // chilometri per angolo di longitudine
 
-    console.log(lat);
+    // console.log(lat);
 
-      // // i calculate the bounds
-        const latMin = lat - (distanceKm / kmPerDegreeLat);
-        const latMax = lat + (distanceKm / kmPerDegreeLat);
-        const lonMin = lon - (distanceKm / kmPerDegreeLon);
-        const lonMax = lon + (distanceKm / kmPerDegreeLon);
+    //   // // i calculate the bounds
+    //     const latMin = lat - (distanceKm / kmPerDegreeLat);
+    //     const latMax = lat + (distanceKm / kmPerDegreeLat);
+    //     const lonMin = lon - (distanceKm / kmPerDegreeLon);
+    //     const lonMax = lon + (distanceKm / kmPerDegreeLon);
 
-      // // i pass the results to my datas
-      this.bounds.latMin = latMin;
-      this.bounds.latMax = latMax;
-      this.bounds.lonMin = lonMin;
-      this.bounds.lonMax = lonMax;
+    //   // // i pass the results to my datas
+    //   this.bounds.latMin = latMin;
+    //   this.bounds.latMax = latMax;
+    //   this.bounds.lonMin = lonMin;
+    //   this.bounds.lonMax = lonMax;
 
-    }
+    // }
   },
   created() {
     this.fetchApartments();
-    this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
+    // this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
   }
 }
 </script>
