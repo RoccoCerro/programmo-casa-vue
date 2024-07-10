@@ -3,7 +3,7 @@
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
       <form class="d-flex" role="search" @submit.prevent="searchForZone">
-        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="fetchSuggestions">
+        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
         <!-- @keyup="fetchSuggestions"  -->
         <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
           <button class="btn btn-outline-dark" type="submit">Cerca</button>
@@ -116,6 +116,7 @@ sessionStorage.clear(); -->
 // var  _ =  require ( 'lodash' );
 import axios from 'axios'
 // import useMath from '@vueuse/math'
+import _ from 'lodash'
 
 export default {
   data() {
@@ -126,6 +127,7 @@ export default {
       // apartmentsResearch: '',
       currentPage: 1,
       lastPage: null,
+      count: 0,
       // i set the datas used to calculate the bounds
       // latitude: 0,
       // longitude: 0,
@@ -159,19 +161,35 @@ export default {
       this.currentPage = n
       this.fetchPosts()
     },
-    fetchSuggestions(){
-      axios.get('http://127.0.0.1:8000/api/suggestions', {
-        params: {
-          page: this.currentPage,
-          parametro: this.zone,
-          // perPage: 9
-        }
-      })
-      .then((res) => {
-        this.suggestions = res.data.response.results
-        console.log('questo è il res di suggestion',res.data.response.results)
-      })
-    },
+    // fetchSuggestions(){
+
+    //     axios.get('http://127.0.0.1:8000/api/suggestions', {
+    //       params: {
+    //         page: this.currentPage,
+    //         parametro: this.zone,
+    //         // perPage: 9
+    //       }
+    //     })
+    //     .then((res) => {
+    //       this.suggestions = res.data.response.results
+    //       console.log('questo è il res di suggestion',res.data.response.results)
+    //     })
+    // },
+
+    search: _.debounce(async function() {
+      if (!this.zone) {
+        this.suggestions = []
+        return
+      }
+
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/suggestions?parametro=${this.zone}`)
+        this.suggestions = response.data.response.results
+        console.log(response.data.response.results)
+      } catch (error) {
+        console.error(error)
+      }
+    }, 500), // Ritarda la chiamata di 500ms
     fetchApartments() {
 
       axios.get('http://127.0.0.1:8000/api/apartments', {
