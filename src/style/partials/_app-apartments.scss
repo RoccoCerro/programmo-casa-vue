@@ -1,0 +1,15 @@
+.suggestions{
+  padding: 10px;
+  border: 1px solid rgba(8, 38, 38, 0.185);
+  border-bottom-left-radius: 20px ;
+  border-bottom-right-radius: 20px ;
+  
+  .suggestion {
+    cursor: pointer;
+    padding: 1px;
+  
+    &:hover{
+      background-color: rgba(38, 38, 38, 0.048);
+    }
+  }
+}

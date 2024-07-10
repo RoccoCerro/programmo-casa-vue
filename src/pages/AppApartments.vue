@@ -2,10 +2,18 @@
   <div class="container">
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
-      <form class="d-flex" role="search" @submit.prevent="[calculateLimitsLatLon, searchForZone]">
-        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
-        <button class="btn btn-outline-dark"  type="submit">Cerca</button>
+      <form class="d-flex" role="search" @submit.prevent="searchForZone">
+        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="fetchSuggestions">
+        <!-- @keyup="fetchSuggestions"  -->
+        <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
+          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <!-- </RouterLink> -->
       </form>
+      <ul v-if="zone" class="suggestions list-unstyled">
+        <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
+          {{ suggestion.address.freeformAddress }}
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -47,8 +55,8 @@
             {{ apartment.sponsorships.apartment_id }}
             <p>
               {{
-                  apartment.title_apartment
-               }}
+                apartment.title_apartment
+              }}
             </p>
           </div>
 
@@ -105,21 +113,23 @@ sessionStorage.clear(); -->
 </template>
 
 <script>
+// var  _ =  require ( 'lodash' );
 import axios from 'axios'
 // import useMath from '@vueuse/math'
-
+import AppAdvancedSearch from './AppAdvancedSearch.vue';
 
 export default {
   data() {
     return {
       zone:'',
+      suggestions:[],
       apartmentsResearch: '',
       apartments: [],
       currentPage: 1,
       lastPage: null,
       // i set the datas used to calculate the bounds
-      latitude: 45.482516,
-      longitude: 9.168860,
+      latitude: 0,
+      longitude: 0,
       distance: 20,
       bounds: {
         latMin: 0,
@@ -128,6 +138,9 @@ export default {
         lonMax: 0,
       }
     }
+  },
+  components:{
+    AppAdvancedSearch
   },
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
@@ -150,6 +163,19 @@ export default {
       this.currentPage = n
       this.fetchPosts()
     },
+    fetchSuggestions(){
+      axios.get('http://127.0.0.1:8000/api/suggestions', {
+        params: {
+          page: this.currentPage,
+          parametro: this.zone,
+          // perPage: 9
+        }
+      })
+      .then((res) => {
+        this.suggestions = res.data.response.results
+        console.log(res.data.response.results)
+      })
+    },
     fetchApartments() {
 
       axios.get('http://127.0.0.1:8000/api/apartments', {
@@ -169,8 +195,11 @@ export default {
     searchForZone() {
       axios.get('http://127.0.0.1:8000/api/search',{
         params: {
-          page: this.currentPage,
-          zone: this.zone
+          // page: this.currentPage,
+          min_lat: this.bounds.latMin,
+          max_lat: this.bounds.latMax,
+          min_lon: this.bounds.lonMin,
+          max_lon: this.bounds.lonMax
           // perPage: 9
         }
       })
@@ -181,6 +210,14 @@ export default {
         console.log(this.zone)
         console.log('arrey ricerca' + this.apartmentsResearch)
       })
+    },
+    selectSuggestion(el){
+      this.zone = el.address.freeformAddress
+      this.suggestions = ''
+
+      this.latitude = el.position.lat
+      this.longitude = el.position.lon
+      this.calculateLimitsLatLon()
     },
     // this function takes latitude, longitude, distance in kilometers and calculates the bounds
     calculateLimitsLatLon(){
@@ -214,4 +251,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use '../style/partials/app-apartments';
+</style>
