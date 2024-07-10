@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="!responseMessage.success" class="container">
    <!-- <form action="" method="POST"> -->
     <div class="mb-3">
       <label for="name" class="form-label">Inserisci il tuo Nome</label>
@@ -31,7 +31,7 @@
    <h5>Messaggio: </h5><p>{{ text }}</p>
  </div>
 
- <AppMessageSuccess />
+ <AppMessageSuccess v-if="responseMessage.success" :message="responseMessage" />
 </template>
 
 <script>
@@ -46,7 +46,8 @@ export default {
      surname: "",
      email_sender: "",
      text: "",
-     phone_number: ""
+     phone_number: "",
+     responseMessage: {},
      }
    },
  methods: {
@@ -60,6 +61,8 @@ export default {
       phone_number: this.phone_number
     };
 
+    let _this = this;
+
     axios.post(`http://127.0.0.1:8000/api/messages`, null, { params: {
       message: this.message,
       name: this.name,
@@ -70,7 +73,9 @@ export default {
       apartment_id: sessionStorage.getItem("apartmentId"),
 }})
   .then(function (response) {
-    console.log(response);
+    // console.log(response.data);
+    _this.responseMessage = response.data;
+    // console.log(_this.responseMessage);
   });
   },
    changePage(n) {
