@@ -18,6 +18,9 @@
     <h3>Numero di bagni: </h3><p>{{ bathrooms }}</p>
     <h3>Numero di stanze da letto: </h3><p>{{ beds }}</p>
     <h3>Metri Quadrati: </h3><p>{{ sqrMeters }}</p>
+    <h3>Servizi Attivi:</h3>
+    <p v-for="service in services">{{service}}</p>
+    
   </div>
 
   
@@ -51,6 +54,7 @@ export default {
       latitude: sessionStorage.getItem("latitude"),
       longitude: sessionStorage.getItem("longitude"),
       completeAddress: sessionStorage.getItem("completeAddress"),
+      services: sessionStorage.getItem("services")
     }
   },
   methods: {
@@ -61,7 +65,7 @@ export default {
 
   },
   created() {
-    
+    console.log(this.services)
   }
 }
 </script>

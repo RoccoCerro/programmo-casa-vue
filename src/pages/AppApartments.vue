@@ -35,16 +35,16 @@
   <div class="container mt-3 mb-3 text-center">
     <h1>appartamenti in evidenza</h1>
     <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div v-for="apartment in apartments">
+      <div  v-for="apartment in apartments">
         <!-- mostriamo gli appartamenti in evidenza -->
 
-        <router-link :to="'/apartment'" class="card h-100"  @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
+        <router-link :to="'/apartment'"  v-if="apartment.sponsorships.length > 0" class="card h-100"  @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address,apartment.services)">
           <div class="card-header">
             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
 
           </div>
           <div class="card-body">
-            {{ apartment.sponsorships.apartment_id }}
+            <p >{{ apartment.sponsorships.apartment_id }}</p>
             <p>
               {{
                   apartment.title_apartment
@@ -63,7 +63,7 @@
     <h1>Altri appartamenti</h1>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <div v-if="zone === ''" v-for="apartment in apartments">
-        <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)">
+        <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address,apartment.services)">
           <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ apartment.title_apartment }}</p>
@@ -130,7 +130,7 @@ export default {
     }
   },
   methods: {
-    bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
+    bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress,services){
       // console.log(id)
       sessionStorage.setItem("apartmentId", id);
       sessionStorage.setItem("titleApartment", titleApartment);
@@ -143,6 +143,7 @@ export default {
       sessionStorage.setItem("latitude", latitude);
       sessionStorage.setItem("longitude", longitude);
       sessionStorage.setItem("completeAddress", completeAddress);
+      sessionStorage.setItem("services", services);
       router.push({ path: 'apartment' })
     },
     changePage(n) {
@@ -160,7 +161,7 @@ export default {
       })
         .then((res) => {
           // console.log(res.data.posts) // senza la paginazione
-          // console.log(res.data.results.data)
+          console.log(res.data.results.data)
           this.apartments = res.data.results.data
           this.lastPage = res.data.results.last_page
         })
@@ -177,9 +178,9 @@ export default {
       .then((res) => {
         
         this.apartmentsResearch = res.data;
-        console.log(res.data)
-        console.log(this.zone)
-        console.log('arrey ricerca' + this.apartmentsResearch)
+        // console.log(res.data)
+        // console.log(this.zone)
+        // console.log('arrey ricerca' + this.apartmentsResearch)
       })
     },
     // this function takes latitude, longitude, distance in kilometers and calculates the bounds
@@ -210,6 +211,7 @@ export default {
   created() {
     this.fetchApartments();
     this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
+    console.log(this.apartments);
   }
 }
 </script>
