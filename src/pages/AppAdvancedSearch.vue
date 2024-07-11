@@ -1,39 +1,60 @@
 <template>
   <div>
-    ricerca avanzata
-    {{ zone }}
+    <div class="container">
 
-    <ul>
-      <li v-for="apartment in apartmentsResearch">
-        {{ apartment.title_apartment }}
-        <p>via: {{ apartment.complete_address }}</p>
-      </li>
-    </ul>
+      <h1>Ricerca avanzata</h1>
 
-    <div class="services">
-      <button :class="('btn btn-primary me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
-      <button @click="advancedSearch">Aggiorna</button>
+      <div>
+        <div class="my-errors text-danger" v-if="errorSearch !== ''">
+          {{ errorSearch }}
+        </div>
+        <form class="d-flex" role="search" @submit.prevent="advancedSearch"> 
+          
+          <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
+          <!-- @keyup="fetchSuggestions"  -->
+          <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
+          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+          <!-- </RouterLink> -->
+        </form>
+        <ul v-if="zone" class="suggestions list-unstyled">
+          <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
+            {{ suggestion.address.freeformAddress }}
+          </li>
+        </ul>
+      </div>
+  
+      <ul>
+        <li v-for="apartment in apartmentsResearch">
+          {{ apartment.title_apartment }}
+          <p>via: {{ apartment.complete_address }}</p>
+        </li>
+      </ul>
+  
+      <div class="services">
+        <button :class="('btn btn-outline-dark me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
+        <!-- <button @click="advancedSearch">Aggiorna</button> -->
+      </div>
     </div>
-
-    <!-- {{ latitude }} {{ longitude  }} -->
 
     <div class="container search-bar">
       <form class="form-search-latitude my-3" action="">
-        <label for="complete_address" class="form-label">Inserisci la latitudine</label>
+        <!-- <label for="complete_address" class="form-label">Inserisci la latitudine</label>
         <input v-model.number="latitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
         <label for="complete_address" class="form-label">Inserisci la longitudine</label>
-        <input v-model.number="longitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
+        <input v-model.number="longitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite"> -->
         <label for="complete_address" class="form-label">Inserisci la distanza in Chilometri</label>
         <input v-model.number="distance" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
+        <label for="customRange1" class="form-label">Inserisci la distanza in Chilometri</label>
+        <input v-model.number="distance" @input="calculateLimitsLatLon" step="5" type="range" class="form-range my-input-address" id="customRange1">
       </form>
       <div class="search-bar_solutions">
-        <h4>Latitudine: </h4><span>{{ latitude }}</span>
-        <h4>Longitudine: </h4><span>{{ longitude }}</span>
+        <!-- <h4>Latitudine: </h4><span>{{ latitude }}</span>
+        <h4>Longitudine: </h4><span>{{ longitude }}</span> -->
         <h4>Distanza: </h4><span>{{ distance }}</span>
-        <h4>Latitudine Minima: </h4><span>{{ bounds.latMin }}</span>
+        <!-- <h4>Latitudine Minima: </h4><span>{{ bounds.latMin }}</span>
         <h4>Latitudine Massima: </h4><span>{{ bounds.latMax }}</span>
         <h4>Longitudine Minima: </h4><span>{{ bounds.lonMin }}</span>
-        <h4>Longitudine Massima: </h4><span>{{ bounds.lonMax }}</span>
+        <h4>Longitudine Massima: </h4><span>{{ bounds.lonMax }}</span> -->
       </div>
 
       <hr>
@@ -44,12 +65,16 @@
 <script>
   import axios from 'axios'
 
+  import _ from 'lodash'
+
   export default {
     data(){
       return{
         zone:'',
         apartmentsResearch: '',
         suggestion:'',
+        suggestions: [],
+        errorSearch: '',
         // i set the datas used to calculate the bounds
         latitude: 0,
         longitude: 0,
@@ -92,10 +117,10 @@
       },
       fetchServices(){
         axios.get('http://127.0.0.1:8000/api/services')
-      .then((res) => {
-        this.services = res.data.results
-        // console.log(this.services[0])
-      })
+        .then((res) => {
+          this.services = res.data.results
+          // console.log(this.services[0])
+        })
       },
       toggleService(serviceId){
 
@@ -114,11 +139,11 @@
       buttonToggle(serviceId){
         const button = document.querySelector('.service-'+serviceId);
         if(this.activeFilters.includes(serviceId)){
-          button.classList.remove('btn-primary');
-          button.classList.add('btn-secondary');
+          button.classList.remove('btn-outline-dark');
+          button.classList.add('btn-dark');
         }else{
-          button.classList.remove('btn-secondary');
-          button.classList.add('btn-primary');
+          button.classList.remove('btn-dark');
+          button.classList.add('btn-outline-dark');
         }
       },
       advancedSearch(){
@@ -126,6 +151,7 @@
         // let json=JSON.stringify(data);
         // let post_data={json_data:json}
         // axios.post('/url',post_data)
+        this.calculateLimitsLatLon()
 
         let data = {
           min_lat: this.bounds.latMin,
@@ -141,20 +167,68 @@
         // let post_data = { json_data: json }
 
         axios.post('http://127.0.0.1:8000/api/advanced', data)
-      .then((res) => {
-        // this.services = res.data.results
-        console.log(res)
-      }).catch(function(error){
-        console.log('error axios', error);
-      })
+        .then((res) => {
+          // this.services = res.data.results
+          this.apartmentsResearch = res.data.response;
+          console.log(res.data)
+        }).catch(function(error){
+          console.log('error axios', error);
+        })
+      },
+      searchForZone(){
+        this.calculateLimitsLatLon()
+
+        axios.get('http://127.0.0.1:8000/api/search',{
+        params: {
+          // page: this.currentPage,
+          min_lat: this.bounds.latMin,
+          max_lat: this.bounds.latMax,
+          min_lon: this.bounds.lonMin,
+          max_lon: this.bounds.lonMax,
+          // perPage: 9
+        }
+        })
+        .then((res) => {
+          
+          this.apartmentsResearch = res.data;
+          console.log(res.data)
+          console.log(this.zone)
+          console.log('array ricerca' + this.apartmentsResearch)
+        })
+      },
+      search: _.debounce(async function() {
+      if (!this.zone) {
+        this.suggestions = []
+        return
       }
+
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/suggestions?parametro=${this.zone}`)
+        this.suggestions = response.data.response.results
+        console.log(response.data.response.results)
+      } catch (error) {
+        console.error(error)
+      }
+
+      sessionStorage.setItem('latitude', '');
+      sessionStorage.setItem('longitude', '');
+
+      }, 500),
+      selectSuggestion(el){
+      this.zone = el.address.freeformAddress
+      this.suggestions = ''
+
+      this.latitude = el.position.lat
+      this.longitude = el.position.lon
+      
+      },
     },
     mounted(){
       // this.zone = sessionStorage.getItem('zone')
       this.latitude = parseFloat(sessionStorage.getItem('latitude'))
       this.longitude = parseFloat(sessionStorage.getItem('longitude'))
       this.calculateLimitsLatLon()
-            this.advancedSearch()
+      // this.advancedSearch()
 
       this.fetchServices()
 
