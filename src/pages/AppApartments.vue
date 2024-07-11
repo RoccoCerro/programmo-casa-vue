@@ -84,26 +84,6 @@
     </div>
   </div>
 
-
-
-
-
-
-  <!-- // Save data to sessionStorage
-sessionStorage.setItem("key", "value");
-
-// Get saved data from sessionStorage
-let data = sessionStorage.getItem("key");
-
-// Remove saved data from sessionStorage
-sessionStorage.removeItem("key");
-
-// Remove all saved data from sessionStorage
-sessionStorage.clear(); -->
-
-
-
-
 </template>
 
 <script>
@@ -118,57 +98,19 @@ export default {
       zone:'',
       suggestions:[],
       apartments: [],
-      // apartmentsResearch: '',
       currentPage: 1,
       lastPage: null,
       count: 0,
-      // i set the datas used to calculate the bounds
-      // latitude: 0,
-      // longitude: 0,
-      // distance: 20,
-      // bounds: {
-      //   latMin: 0,
-      //   latMax: 0,
-      //   lonMin: 0,
-      //   lonMax: 0,
-      // }
     }
   },
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
-      // console.log(id)
-      sessionStorage.setItem("apartmentId", id);
-      sessionStorage.setItem("titleApartment", titleApartment);
-      sessionStorage.setItem("rooms", rooms);
-      sessionStorage.setItem("beds", beds);
-      sessionStorage.setItem("bathrooms", bathrooms);
-      sessionStorage.setItem("sqrMeters", sqrMeters);
-      sessionStorage.setItem("imgApartment", imgApartment);
-      sessionStorage.setItem("description", description);
-      sessionStorage.setItem("latitude", latitude);
-      sessionStorage.setItem("longitude", longitude);
-      sessionStorage.setItem("completeAddress", completeAddress);
-      router.push({ path: 'apartment' })
     },
     changePage(n) {
       if (n === this.currentPage) return
       this.currentPage = n
       this.fetchPosts()
     },
-    // fetchSuggestions(){
-
-    //     axios.get('http://127.0.0.1:8000/api/suggestions', {
-    //       params: {
-    //         page: this.currentPage,
-    //         parametro: this.zone,
-    //         // perPage: 9
-    //       }
-    //     })
-    //     .then((res) => {
-    //       this.suggestions = res.data.response.results
-    //       console.log('questo è il res di suggestion',res.data.response.results)
-    //     })
-    // },
 
     search: _.debounce(async function() {
       if (!this.zone) {
