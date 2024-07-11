@@ -2,12 +2,15 @@
   <div class="container">
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
-      <form class="d-flex" role="search" @submit.prevent="searchForZone" > 
+      <div class="my-errors text-danger" v-if="errorSearch !== ''">
+        {{ errorSearch }}
+      </div>
+      <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
         
         <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
         <!-- @keyup="fetchSuggestions"  -->
         <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
-          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <button class="btn btn-outline-dark" type="submit">Cerca</button>
         <!-- </RouterLink> -->
       </form>
       <ul v-if="zone" class="suggestions list-unstyled">
@@ -71,6 +74,7 @@ export default {
       currentPage: 1,
       lastPage: null,
       count: 0,
+      errorSearch: ''
     }
   },
   methods: {
@@ -121,7 +125,7 @@ export default {
         
         return true
       }else{
-        alert('Devi selezionare una via')
+        this.errorSearch = 'Seleziona una via suggerita'
         return false
       }
     },
@@ -136,6 +140,8 @@ export default {
   },
   created() {
     this.fetchApartments();
+    sessionStorage.setItem('latitude', '');
+    sessionStorage.setItem('longitude', '');
   }
 }
 </script>
