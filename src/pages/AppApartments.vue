@@ -2,11 +2,15 @@
   <div class="container">
     <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
     <div>
-      <form class="d-flex" role="search" @submit.prevent="searchForZone">
+      <div class="my-errors text-danger" v-if="errorSearch !== ''">
+        {{ errorSearch }}
+      </div>
+      <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
+        
         <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
         <!-- @keyup="fetchSuggestions"  -->
         <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
-          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+        <button class="btn btn-outline-dark" type="submit">Cerca</button>
         <!-- </RouterLink> -->
       </form>
       <ul v-if="zone" class="suggestions list-unstyled">
@@ -16,28 +20,6 @@
       </ul>
     </div>
   </div>
-
-  <!-- <div class="container search-bar">
-    <form class="form-search-latitude my-3" action="">
-      <label for="complete_address" class="form-label">Inserisci la latitudine</label>
-      <input v-model.number="latitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
-      <label for="complete_address" class="form-label">Inserisci la longitudine</label>
-      <input v-model.number="longitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
-      <label for="complete_address" class="form-label">Inserisci la distanza in Chilometri</label>
-      <input v-model.number="distance" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
-    </form>
-    <div class="search-bar_solutions">
-      <h4>Latitudine: </h4><span>{{ latitude }}</span>
-      <h4>Longitudine: </h4><span>{{ longitude }}</span>
-      <h4>Distanza: </h4><span>{{ distance }}</span>
-      <h4>Latitudine Minima: </h4><span>{{ bounds.latMin }}</span>
-      <h4>Latitudine Massima: </h4><span>{{ bounds.latMax }}</span>
-      <h4>Longitudine Minima: </h4><span>{{ bounds.lonMin }}</span>
-      <h4>Longitudine Massima: </h4><span>{{ bounds.lonMax }}</span>
-    </div>
-
-    <hr>
-  </div> -->
 
   <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
   <div class="container mt-3 mb-3 text-center">
@@ -72,15 +54,6 @@
           </div>
         <!-- </router-link> -->
       </div>
-
-      <!-- <div v-else v-for="apartment in apartmentsResearch" class="col">
-        <div class="card">
-          <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
-          <div class="card-body">
-            <p class="card-text">{{ apartment.title_apartment }}</p>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 
@@ -101,6 +74,7 @@ export default {
       currentPage: 1,
       lastPage: null,
       count: 0,
+      errorSearch: ''
     }
   },
   methods: {
@@ -125,6 +99,10 @@ export default {
       } catch (error) {
         console.error(error)
       }
+
+      sessionStorage.setItem('latitude', '');
+      sessionStorage.setItem('longitude', '');
+
     }, 500),
     fetchApartments() {
 
@@ -141,8 +119,15 @@ export default {
 
     },
     searchForZone() {
-      sessionStorage.setItem('zone', this.zone);
-      this.$router.push('/advanced-search')
+      if (sessionStorage.getItem('latitude') !== ''){
+        sessionStorage.setItem('zone', this.zone);
+        this.$router.push('/advanced-search')
+        
+        return true
+      }else{
+        this.errorSearch = 'Seleziona una via suggerita'
+        return false
+      }
     },
     selectSuggestion(el){
       this.zone = el.address.freeformAddress
@@ -155,6 +140,8 @@ export default {
   },
   created() {
     this.fetchApartments();
+    sessionStorage.setItem('latitude', '');
+    sessionStorage.setItem('longitude', '');
   }
 }
 </script>
