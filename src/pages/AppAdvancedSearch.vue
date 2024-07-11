@@ -12,6 +12,7 @@
 
     <div class="services">
       <button :class="('btn btn-primary me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
+      <button @click="advancedSearch">Aggiorna</button>
     </div>
 
     <!-- {{ latitude }} {{ longitude  }} -->
@@ -93,7 +94,7 @@
         axios.get('http://127.0.0.1:8000/api/services')
       .then((res) => {
         this.services = res.data.results
-        console.log(this.services[0])
+        // console.log(this.services[0])
       })
       },
       toggleService(serviceId){
@@ -119,6 +120,33 @@
           button.classList.remove('btn-secondary');
           button.classList.add('btn-primary');
         }
+      },
+      advancedSearch(){
+        // let data=[1,2,3,4,5];
+        // let json=JSON.stringify(data);
+        // let post_data={json_data:json}
+        // axios.post('/url',post_data)
+
+        let data = {
+          min_lat: this.bounds.latMin,
+          max_lat: this.bounds.latMax,
+          min_lon: this.bounds.lonMin,
+          max_lon: this.bounds.lonMax,
+          activeFilters: this.activeFilters
+        }
+
+
+
+        // let json = JSON.stringify(data);
+        // let post_data = { json_data: json }
+
+        axios.post('http://127.0.0.1:8000/api/advanced', data)
+      .then((res) => {
+        // this.services = res.data.results
+        console.log(res)
+      }).catch(function(error){
+        console.log('error axios', error);
+      })
       }
     },
     mounted(){
@@ -126,6 +154,8 @@
       this.latitude = parseFloat(sessionStorage.getItem('latitude'))
       this.longitude = parseFloat(sessionStorage.getItem('longitude'))
       this.calculateLimitsLatLon()
+            this.advancedSearch()
+
       this.fetchServices()
 
       // this.latitude = el.position.lat
@@ -137,7 +167,7 @@
           min_lat: this.bounds.latMin,
           max_lat: this.bounds.latMax,
           min_lon: this.bounds.lonMin,
-          max_lon: this.bounds.lonMax
+          max_lon: this.bounds.lonMax,
           // perPage: 9
         }
       })
@@ -146,7 +176,7 @@
         this.apartmentsResearch = res.data;
         console.log(res.data)
         console.log(this.zone)
-        console.log('arrey ricerca' + this.apartmentsResearch)
+        console.log('array ricerca' + this.apartmentsResearch)
       })
     }
   }
