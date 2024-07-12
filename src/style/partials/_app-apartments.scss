@@ -1,7 +1,18 @@
 .page-apartments{
   padding-top: 70px;
 
-  
+  .carousel{
+    display: flex;
+    overflow-x: auto;
+
+    &>*{
+      padding: 5px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
 
   .suggestions{
     padding: 10px;

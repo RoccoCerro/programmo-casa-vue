@@ -20,10 +20,11 @@
     </div>
   
     <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-    <div class="container mt-3 mb-3 text-center">
+    <div class="mt-3 mb-3 text-center">
       <h1>In evidenza</h1>
-      <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
-        <div class="col" v-for="apartment in apartments">
+      <!-- row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3 -->
+      <div class="carousel" ref="carousel">
+        <div class="col-3" v-for="apartment in apartments">
           <div v-if="apartment.sponsorships.length > 0" class="card h-100">
             <ApartmentCard :apartment="apartment"/>
           </div>
@@ -124,6 +125,21 @@ export default {
       sessionStorage.setItem('longitude', el.position.lon);
       
     },
+    scrollCarousel(e) {
+      e.preventDefault();
+      if (e.deltaY > 0){
+        this.$refs.carousel.scrollLeft += 100;
+      } 
+      else {
+        this.$refs.carousel.scrollLeft -= 100;
+      } 
+    }
+  },
+  mounted(){
+    this.$refs.carousel.addEventListener('wheel', this.scrollCarousel);
+  },  
+  beforeMount(){
+    // this.$refs.carousel.removeEventListener('wheel', this.scrollCarousel);
   },
   created() {
     this.fetchApartments();
