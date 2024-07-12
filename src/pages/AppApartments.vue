@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
-    <div>
+    <h1 class="text-2xl my-8 text-center mb-3 my_title">Visita i nostri Appartamenti!</h1>
+  <div>
       <div class="my-errors text-danger" v-if="errorSearch !== ''">
         {{ errorSearch }}
       </div>
@@ -22,8 +22,13 @@
   </div>
 
   <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-  <div class="container mt-3 mb-3 text-center">
-    <h1>appartamenti in evidenza</h1>
+  <div class="container mt-3 mb-3">
+
+    <div class="my_section-title my-5">
+      <div class="line mx-5"></div>
+      <h1 class="text-2xl my-8 text-center mb-3 my_title">I Premium</h1>
+    </div>
+
     <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
       <AppApartmentCardSponsored v-for="apartment in apartments" :apartment="apartment"/>
       
@@ -32,13 +37,39 @@
 
 
   <div class="container">
-    <h1>Altri appartamenti</h1>
+    <div class="my_section-title my-5">
+      <div class="line mx-5"></div>
+      <h1 class="text-2xl my-8 text-center mb-3 my_title">Gli Standard</h1>
+    </div>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
       <AppApartmentCard v-if="zone === ''"  v-for="apartment in apartments" :apartment="apartment"/>
     </div>
   </div>
 
 </template>
+
+<style lang="scss" scoped>
+@use '../style/partials/app-apartments';
+
+.my_section-title{
+  position: relative;
+  .line{
+    border: 1px solid;
+  }
+  .my_title{
+    position: absolute;
+    font-size: 20px;
+    background-color: white;
+    top: -12px;
+    display: inline;
+    margin-left: 50%;
+    transform: translate(-50%, 0px);
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+</style>
 
 <script>
 // var  _ =  require ( 'lodash' );
@@ -133,6 +164,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@use '../style/partials/app-apartments';
-</style>
