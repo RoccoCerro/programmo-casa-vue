@@ -23,13 +23,6 @@
         </ul>
       </div>
   
-      <ul>
-        <li v-for="apartment in apartmentsResearch">
-          {{ apartment.title_apartment }}
-          <p>via: {{ apartment.complete_address }}</p>
-        </li>
-      </ul>
-  
       <div class="services">
         <button :class="('btn btn-outline-dark me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
         <!-- <button @click="advancedSearch">Aggiorna</button> -->
@@ -59,15 +52,25 @@
 
       <hr>
     </div> 
+    <div class="container">
+      <div class="row">
+        <div class="col-3" v-for="apartment in apartmentsResearch"> 
+          <ApartmentCard :apartment="apartment"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-
   import _ from 'lodash'
+  import ApartmentCard from '../components/ApartmentCard.vue'
 
   export default {
+    components:{
+      ApartmentCard
+    },
     data(){
       return{
         zone:'',
@@ -151,29 +154,35 @@
         // let json=JSON.stringify(data);
         // let post_data={json_data:json}
         // axios.post('/url',post_data)
-        this.calculateLimitsLatLon()
 
-        let data = {
-          min_lat: this.bounds.latMin,
-          max_lat: this.bounds.latMax,
-          min_lon: this.bounds.lonMin,
-          max_lon: this.bounds.lonMax,
-          activeFilters: this.activeFilters
+        if (this.latitude !== ''){
+
+          this.calculateLimitsLatLon()
+  
+          let data = {
+            min_lat: this.bounds.latMin,
+            max_lat: this.bounds.latMax,
+            min_lon: this.bounds.lonMin,
+            max_lon: this.bounds.lonMax,
+            activeFilters: this.activeFilters
+          }
+          // let json = JSON.stringify(data);
+          // let post_data = { json_data: json }
+  
+          axios.post('http://127.0.0.1:8000/api/advanced', data)
+          .then((res) => {
+            // this.services = res.data.results
+            this.apartmentsResearch = res.data.response;
+            console.log(res.data)
+          }).catch(function(error){
+            console.log('error axios', error);
+          })
+
+          return true
+        }else{
+          this.errorSearch = 'Seleziona una via suggerita'
+          return false
         }
-
-
-
-        // let json = JSON.stringify(data);
-        // let post_data = { json_data: json }
-
-        axios.post('http://127.0.0.1:8000/api/advanced', data)
-        .then((res) => {
-          // this.services = res.data.results
-          this.apartmentsResearch = res.data.response;
-          console.log(res.data)
-        }).catch(function(error){
-          console.log('error axios', error);
-        })
       },
       searchForZone(){
         this.calculateLimitsLatLon()
@@ -210,8 +219,8 @@
         console.error(error)
       }
 
-      sessionStorage.setItem('latitude', '');
-      sessionStorage.setItem('longitude', '');
+      this.latitude = ""
+      this.longitude = ""
 
       }, 500),
       selectSuggestion(el){
@@ -221,7 +230,7 @@
       this.latitude = el.position.lat
       this.longitude = el.position.lon
       
-      },
+      }
     },
     mounted(){
       // this.zone = sessionStorage.getItem('zone')
@@ -259,8 +268,10 @@
 <style lang="scss" scoped>
 input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: black;
  /* Colore desiderato */ cursor: pointer; }
- /* Per Firefox */ input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
+ /* Per Firefox */ 
+input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
  /* Colore desiderato */ cursor: pointer; } 
- /* Per Internet Explorer */ input[type="range"]::-ms-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
+ /* Per Internet Explorer */ 
+input[type="range"]::-ms-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
  /* Colore desiderato */ cursor: pointer; }
 </style>
