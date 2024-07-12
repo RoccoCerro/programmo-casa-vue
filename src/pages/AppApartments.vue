@@ -20,7 +20,7 @@
     </div>
   
     <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-    <div class="mt-3 mb-3 text-center">
+    <section class="section-carousel mt-3 mb-3 text-center">
       <h1>In evidenza</h1>
       <!-- row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3 -->
       <div class="carousel" ref="carousel">
@@ -30,9 +30,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <h1>Altri appartamenti</h1>
+    </section>
+    <div class="container my-apartments">
       <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
         <div class="col" v-if="zone === ''" v-for="apartment in apartments">
           <ApartmentCard :apartment="apartment"/>

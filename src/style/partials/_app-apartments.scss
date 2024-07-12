@@ -29,5 +29,17 @@
       }
     }
   }
+
+  .my-apartments{
+    transition: transform 5s;
+
+      .col:hover{
+        
+        transform: scale(1.02);
+        z-index: 1;
+
+
+      }
+  }
 }
 
