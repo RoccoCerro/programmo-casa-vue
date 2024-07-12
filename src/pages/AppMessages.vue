@@ -31,7 +31,7 @@
    <h5>Messaggio: </h5><p>{{ text }}</p>
  </div>
 
- <AppMessageSuccess v-if="responseMessage.success" :message="responseMessage" />
+ <AppMessageSuccess v-if="responseMessage.success" :message="responseMessage" :id="id_apartment" />
 </template>
 
 <script>
@@ -40,6 +40,12 @@ import AppMessageSuccess from '../components/AppMessageSuccess.vue'
 
 
 export default {
+  props:{
+    id: {
+      type: String,
+      required: true,
+    }
+  },
  data() {
    return {
      name: "",
@@ -48,14 +54,10 @@ export default {
      text: "",
      phone_number: "",
      responseMessage: {},
+     id_apartment: this.id
      }
    },
-   props:{
-    id: {
-      type: String,
-      required: true,
-    }
-  },
+   
  methods: {
   sendMessage(){
     let body = {
@@ -98,6 +100,7 @@ export default {
   //  this.fetchApartments();
   //  this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
   console.log('Prova id appartamento', this.id)
+  console.log('dai data', this.id_apartment);
  },
 }
 </script>

@@ -15,7 +15,7 @@
       </div>
       
       <ul class="list-group list-group-flush">
-        <RouterLink :to="'/apartments'" href="" class="card-link m-3">Torna agli Appartamenti</RouterLink>
+        <RouterLink :to="'/apartments/' + this.id" href="" class="card-link m-3">Torna all'Appartamento</RouterLink>
         <!-- <a href="#" class="card-link">Another link</a> -->
       </ul>
     </div> 
@@ -33,16 +33,21 @@ export default {
       
     }
   },
+  
   methods: {
     
   },
   created() {
-    
+    console.log('questo arriva dal messaggio di successo: ', this.id)
   },
   props:{
     message: {
       type: Object,
       required: false
+    },
+    id: {
+    type: String,
+    required: true
     }
   }
 }
