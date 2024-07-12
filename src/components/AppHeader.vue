@@ -14,9 +14,11 @@
           <li class="nav-item">
             <RouterLink class="nav-link" :to="{ name: 'apartments' }">Appartamenti</RouterLink>
           </li>
+        </ul>
+        <ul class="list-unstyled navbar-nav me-3 mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
+              Area Riservata
             </a>
             <ul class="dropdown-menu">
               <li>
@@ -31,17 +33,10 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/dashboard">Pagina Riservata</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
