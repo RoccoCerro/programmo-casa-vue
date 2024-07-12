@@ -53,22 +53,24 @@
       <hr>
     </div> 
     <div class="container">
-      <ul class='row list-unstyled'>
-        <li class="col-3" v-for="apartment in apartmentsResearch">
-          {{ apartment.title_apartment }}
-          <p>via: {{ apartment.complete_address }}</p>
-        </li>
-      </ul>
+      <div class="row">
+        <div class="col-3" v-for="apartment in apartmentsResearch"> 
+          <ApartmentCard :apartment="apartment"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-
   import _ from 'lodash'
+  import ApartmentCard from '../components/ApartmentCard.vue'
 
   export default {
+    components:{
+      ApartmentCard
+    },
     data(){
       return{
         zone:'',
