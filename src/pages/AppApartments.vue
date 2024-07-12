@@ -1,59 +1,57 @@
 <template>
-  <div class="container">
-    <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
-    <div>
-      <div class="my-errors text-danger" v-if="errorSearch !== ''">
-        {{ errorSearch }}
+  <main class="page-apartments">
+    <div class="container">
+      <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
+      <div>
+        <div class="my-errors text-danger" v-if="errorSearch !== ''">
+          {{ errorSearch }}
+        </div>
+        <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
+          
+          <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
+          <button class="btn btn-outline-dark" type="submit">Cerca</button>
+
+        </form>
+        <ul v-if="zone" class="suggestions list-unstyled">
+          <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
+            {{ suggestion.address.freeformAddress }}
+          </li>
+        </ul>
       </div>
-      <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
-        
-        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
-        <!-- @keyup="fetchSuggestions"  -->
-        <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
-        <button class="btn btn-outline-dark" type="submit">Cerca</button>
-        <!-- </RouterLink> -->
-      </form>
-      <ul v-if="zone" class="suggestions list-unstyled">
-        <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
-          {{ suggestion.address.freeformAddress }}
-        </li>
-      </ul>
     </div>
-  </div>
-
-  <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-  <div class="container mt-3 mb-3 text-center">
-    <h1>appartamenti in evidenza</h1>
-    <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-for="apartment in apartments">
-
-        <div v-if="apartment.sponsorships.length > 0" class="card h-100">
-          <!-- mostriamo gli appartamenti in evidenza -->
-          <div class="card-header">
-            <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
-          </div>
-          <div class="card-body">
-            {{ apartment.sponsorships.apartment_id }}
-            <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-              <p>
-                {{ apartment.title_apartment }}
-              </p>
-            </RouterLink>
+  
+    <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
+    <div class="container mt-3 mb-3 text-center">
+      <h1>appartamenti in evidenza</h1>
+      <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
+        <div class="col" v-for="apartment in apartments">
+  
+          <div v-if="apartment.sponsorships.length > 0" class="card h-100">
+            <!-- mostriamo gli appartamenti in evidenza -->
+            <div class="card-header">
+              <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
+            </div>
+            <div class="card-body">
+              {{ apartment.sponsorships.apartment_id }}
+              <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
+                <p>
+                  {{ apartment.title_apartment }}
+                </p>
+              </RouterLink>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-
-  <div class="container">
-    <h1>Altri appartamenti</h1>
-    <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-if="zone === ''" v-for="apartment in apartments">
-        <ApartmentCard :apartment="apartment"/>
+    <div class="container">
+      <h1>Altri appartamenti</h1>
+      <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
+        <div class="col" v-if="zone === ''" v-for="apartment in apartments">
+          <ApartmentCard :apartment="apartment"/>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
 </template>
 

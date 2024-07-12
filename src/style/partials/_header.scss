@@ -1,7 +1,15 @@
-.logo-navbar{
-  width: 100px;
-  animation: rotate 10s linear infinite;
+nav{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+
+  .logo-navbar{
+    width: 100px;
+    animation: rotate 10s linear infinite;
+  }
 }
+
 
 @keyframes rotate {
   from {
