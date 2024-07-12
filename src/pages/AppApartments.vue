@@ -25,22 +25,8 @@
   <div class="container mt-3 mb-3 text-center">
     <h1>appartamenti in evidenza</h1>
     <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-for="apartment in apartments">
-        <div v-if="apartment.sponsorships.length > 0" class="card h-100">
-          <!-- mostriamo gli appartamenti in evidenza -->
-          <div class="card-header">
-            <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
-          </div>
-          <div class="card-body">
-            {{ apartment.sponsorships.apartment_id }}
-            <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-              <p>
-                {{ apartment.title_apartment }}
-              </p>
-            </RouterLink>
-          </div>
-        </div>
-      </div>
+      <AppApartmentCardSponsored v-for="apartment in apartments" :apartment="apartment"/>
+      
     </div>
   </div>
 
@@ -48,23 +34,7 @@
   <div class="container">
     <h1>Altri appartamenti</h1>
     <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-if="zone === ''" v-for="apartment in apartments">
-      
-          <div class="card h-100">
-            <!-- <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)"> -->
-             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top  h-100" alt="">
-             <div class="card-body">
-              <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-              <p>
-                {{ apartment.title_apartment }}
-              </p>
-            </RouterLink>
-             </div>
-             <!-- </router-link> -->
-          </div>
-        
-        
-      </div>
+      <AppApartmentCard v-if="zone === ''"  v-for="apartment in apartments" :apartment="apartment"/>
     </div>
   </div>
 
@@ -75,6 +45,8 @@
 import axios from 'axios'
 // import useMath from '@vueuse/math'
 import _ from 'lodash'
+import AppApartmentCard from '../components/AppApartmentCard.vue'
+import AppApartmentCardSponsored from '../components/AppApartmentCardSponsored.vue'
 
 export default {
   data() {
@@ -87,6 +59,10 @@ export default {
       count: 0,
       errorSearch: ''
     }
+  },
+  components:{
+    AppApartmentCard,
+    AppApartmentCardSponsored
   },
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
