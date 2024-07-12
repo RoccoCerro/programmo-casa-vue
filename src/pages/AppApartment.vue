@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col">
         <div class="card p-3">
-          <div class="col-lg-6">
+          <div class="col-lg-6 mb-3">
             <router-link :to="'/messages'" class="btn btn-primary">Contatta il proprietario</router-link>
           </div>
           <div v-if="apartment" class="card-text">
