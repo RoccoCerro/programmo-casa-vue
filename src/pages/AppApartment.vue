@@ -20,10 +20,59 @@
     <h3>Metri Quadrati: </h3><p>{{ sqrMeters }}</p> -->
     <div class="row">
       <div class="col">
-        <div class="card">
+        <div class="card p-3">
           <div v-if="apartment" class="card-text">
-            {{ apartment.title_apartment }}
+            <h5>
+              Titolo dell Appartamento:
+            </h5>
+            <p>
+              {{ apartment.title_apartment }}
+            </p>
+
+            <div class="mb-3">
+              <h5>Foto dell Appartamento:</h5>
+            <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
+           </div>
+
+            <h5>
+              Descrizione Appartamento:
+            </h5>
+            <p>
+              {{apartment.description}}
+            </p>
+
+            <h5>
+              N° di Stanze
+            </h5>
+            <p>
+              {{apartment.rooms}}
+            </p>
+
+            <h5>
+              N° Camere da Letto:
+            </h5>
+            <p>
+              {{apartment.beds}}
+            </p>
+
+            <h5>
+              N° di Bagni:
+            </h5>
+            <p>
+              {{apartment.bathrooms}}
+            </p>
+
+            <h5>
+              N° M²:
+            </h5>
+            <p>
+              {{apartment.sqr_meters}}
+            </p>
           </div>
+
+          <h5>
+              Servizi Disponibili:
+          </h5>
           <div v-if="apartment.services" v-for="service in apartment.services">
             {{ service.name }}
           </div>
