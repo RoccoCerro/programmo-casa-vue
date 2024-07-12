@@ -40,6 +40,13 @@
           <ApartmentCard :apartment="apartment"/>
         </div>
       </div>
+      <div v-if="lastPage > 1">
+        <ul class="row paginate p-3 justify-content-center list-unstyled">
+          <li :class="page === currentPage ? 'bg-yellow-logo' : ''" class="my-page col-auto border border-dark rounded-circle m-2" v-for="(page, i) in lastPage" @click="changePage(page)">
+            {{ i+1 }}
+          </li>
+        </ul>
+      </div>
     </div>
   </main>
 
@@ -70,12 +77,11 @@ export default {
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
     },
-    changePage(n) {
-      if (n === this.currentPage) return
-      this.currentPage = n
-      this.fetchPosts()
+    changePage(page) {
+      if (page === this.currentPage) return
+      this.currentPage = page
+      this.fetchApartments()
     },
-
     search: _.debounce(async function() {
       if (!this.zone) {
         this.suggestions = []
