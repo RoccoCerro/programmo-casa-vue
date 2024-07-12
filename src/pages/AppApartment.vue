@@ -20,7 +20,10 @@
     <h3>Metri Quadrati: </h3><p>{{ sqrMeters }}</p> -->
     <div class="row">
       <div class="col">
-        <div class="card">
+        <div class="card p-3">
+          <div class="col-lg-6 mb-3">
+            <router-link :to="{name: 'messages', params: {id: apartment.id}}" class="btn btn-primary">Contatta il proprietario</router-link>
+          </div>
           <div v-if="apartment" class="card-text">
             {{ apartment.title_apartment }}
           </div>
@@ -92,6 +95,7 @@ export default {
   },
   created() {
     this.fetchApartment()
+    console.log(this.id);
   }
 }
 </script>

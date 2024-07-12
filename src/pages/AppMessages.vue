@@ -50,6 +50,12 @@ export default {
      responseMessage: {},
      }
    },
+   props:{
+    id: {
+      type: String,
+      required: true,
+    }
+  },
  methods: {
   sendMessage(){
     let body = {
@@ -70,7 +76,7 @@ export default {
       email_sender: this.email_sender,
       text: this.text,
       phone_number: this.phone_number,
-      apartment_id: sessionStorage.getItem("apartmentId"),
+      apartment_id: this.id,
 }})
   .then(function (response) {
     // console.log(response.data);
@@ -91,6 +97,7 @@ export default {
  created() {
   //  this.fetchApartments();
   //  this.calculateLimitsLatLon(this.latitude, this.longitude, this.distance)
+  console.log('Prova id appartamento', this.id)
  },
 }
 </script>
