@@ -55,7 +55,7 @@
     <div class="container">
       <div class="row">
         <div class="col-3" v-for="apartment in apartmentsResearch"> 
-          <ApartmentCard :apartment="apartment"/>
+          <AppApartmentCard :apartment="apartment"/>
         </div>
       </div>
     </div>
@@ -65,11 +65,13 @@
 <script>
   import axios from 'axios'
   import _ from 'lodash'
-  import ApartmentCard from '../components/ApartmentCard.vue'
+  import AppApartmentCard from '../components/AppApartmentCard.vue'
+  import AppApartmentCardSponsored from '../components/AppApartmentCardSponsored.vue'
 
   export default {
     components:{
-      ApartmentCard
+      AppApartmentCard,
+      AppApartmentCardSponsored
     },
     data(){
       return{

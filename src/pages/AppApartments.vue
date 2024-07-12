@@ -23,25 +23,33 @@
     </div>
   
     <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-    <section class="section-carousel mt-3 mb-3 text-center">
-      <h1>In evidenza</h1>
-      <div class="my_section-title my-5">
+   <div class="container">
+    <div class="my_section-title my-5">
       <div class="line mx-5"></div>
-      <h1 class="text-2xl my-8 text-center mb-3 my_title">Gli Standard</h1>
+      <h1 class="text-2xl my-8 text-center mb-3 my_title">In Evidenza</h1>
     </div>
+   </div>
+    <section class="section-carousel mt-3 mb-3 text-center">
+    
       <!-- row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3 -->
       <div class="carousel" ref="carousel">
         <div class="col-12 col-sm-8 col-md-4 col-lg-3" v-for="apartment in apartments">
           <div v-if="apartment.sponsorships.length > 0" class="card h-100">
-            <ApartmentCard :apartment="apartment"/>
+            <AppApartmentCardSponsored :apartment="apartment"/>
           </div>
         </div>
       </div>
     </section>
+    <div class="container">
+    <div class="my_section-title my-5">
+      <div class="line mx-5"></div>
+      <h1 class="text-2xl my-8 text-center mb-3 my_title">Tutti gli Appartamenti</h1>
+    </div>
+   </div>
     <div class="container my-apartments">
       <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
         <div class="col" v-for="apartment in apartments">
-          <ApartmentCard :apartment="apartment"/>
+          <AppApartmentCard :apartment="apartment"/>
         </div>
       </div>
       <div v-if="lastPage > 1">
@@ -89,7 +97,8 @@ import AppApartmentCardSponsored from '../components/AppApartmentCardSponsored.v
 
 export default {
   components:{
-    ApartmentCard
+    AppApartmentCard,
+    AppApartmentCardSponsored
   },
   data() {
     return {
