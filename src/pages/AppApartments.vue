@@ -6,16 +6,19 @@
           {{ errorSearch }}
         </div>
         <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
-          
-          <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
-          <button class="btn btn-outline-dark" type="submit">Cerca</button>
-
+          <div class="col me-2">
+            <input v-model="zone" class="form-control" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
+            <ul v-if="zone" class="suggestions list-unstyled">
+              <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
+                {{ suggestion.address.freeformAddress }}
+              </li>
+            </ul>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-outline-dark" type="submit">Cerca</button>
+          </div>
         </form>
-        <ul v-if="zone" class="suggestions list-unstyled">
-          <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
-            {{ suggestion.address.freeformAddress }}
-          </li>
-        </ul>
+        
       </div>
     </div>
   
@@ -33,7 +36,7 @@
     </section>
     <div class="container my-apartments">
       <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-        <div class="col" v-if="zone === ''" v-for="apartment in apartments">
+        <div class="col" v-for="apartment in apartments">
           <ApartmentCard :apartment="apartment"/>
         </div>
       </div>
