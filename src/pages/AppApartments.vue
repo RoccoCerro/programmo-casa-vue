@@ -1,7 +1,6 @@
 <template>
   <main class="page-apartments">
     <div class="container">
-      <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
       <div>
         <div class="my-errors text-danger" v-if="errorSearch !== ''">
           {{ errorSearch }}
@@ -22,23 +21,11 @@
   
     <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
     <div class="container mt-3 mb-3 text-center">
-      <h1>appartamenti in evidenza</h1>
+      <h1>In evidenza</h1>
       <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
         <div class="col" v-for="apartment in apartments">
-  
           <div v-if="apartment.sponsorships.length > 0" class="card h-100">
-            <!-- mostriamo gli appartamenti in evidenza -->
-            <div class="card-header">
-              <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
-            </div>
-            <div class="card-body">
-              {{ apartment.sponsorships.apartment_id }}
-              <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-                <p>
-                  {{ apartment.title_apartment }}
-                </p>
-              </RouterLink>
-            </div>
+            <ApartmentCard :apartment="apartment"/>
           </div>
         </div>
       </div>

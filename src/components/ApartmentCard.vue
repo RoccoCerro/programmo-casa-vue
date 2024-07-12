@@ -1,5 +1,5 @@
 <template>
-  <div class="card h-100">
+  <div class="card h-100 my-card-apartment">
     <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
     <div class="card-body">
       <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
@@ -24,5 +24,5 @@
 </script>
 
 <style lang="scss" scoped>
-
+@use '../style/partials/apartment-card'
 </style>
