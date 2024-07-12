@@ -1,72 +1,54 @@
 <template>
-  <div class="container">
-    <h1 class="text-2xl my-8">Visita i nostri appartamenti</h1>
-    <div>
-      <div class="my-errors text-danger" v-if="errorSearch !== ''">
-        {{ errorSearch }}
-      </div>
-      <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
-        
-        <input v-model="zone" class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
-        <!-- @keyup="fetchSuggestions"  -->
-        <!-- <RouterLink class="nav-link" :to="{ name: 'advanced-search' }"> -->
-        <button class="btn btn-outline-dark" type="submit">Cerca</button>
-        <!-- </RouterLink> -->
-      </form>
-      <ul v-if="zone" class="suggestions list-unstyled">
-        <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
-          {{ suggestion.address.freeformAddress }}
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
-  <div class="container mt-3 mb-3 text-center">
-    <h1>appartamenti in evidenza</h1>
-    <div class="row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-for="apartment in apartments">
-        <div v-if="apartment.sponsorships.length > 0" class="card h-100">
-          <!-- mostriamo gli appartamenti in evidenza -->
-          <div class="card-header">
-            <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top" alt="">
+  <main class="page-apartments">
+    <div class="container">
+      <div>
+        <div class="my-errors text-danger" v-if="errorSearch !== ''">
+          {{ errorSearch }}
+        </div>
+        <form class="d-flex" role="search" @submit.prevent="searchForZone"> 
+          <div class="col me-2">
+            <input v-model="zone" class="form-control" type="search" placeholder="Cerca" aria-label="Search" @keyup="search">
+            <ul v-if="zone" class="suggestions list-unstyled">
+              <li v-for="(suggestion, i) in suggestions" class="suggestion" @click="selectSuggestion(suggestion)">
+                {{ suggestion.address.freeformAddress }}
+              </li>
+            </ul>
           </div>
-          <div class="card-body">
-            {{ apartment.sponsorships.apartment_id }}
-            <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-              <p>
-                {{ apartment.title_apartment }}
-              </p>
-            </RouterLink>
+          <div class="col-auto">
+            <button class="btn btn-outline-dark" type="submit">Cerca</button>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+  
+    <!-- MOSTRIAMO GLI APPARTAMENTI IN EVIDENZA -->
+    <section class="section-carousel mt-3 mb-3 text-center">
+      <h1>In evidenza</h1>
+      <!-- row gy-3 gx-3 row-cols-1 row-cols-md-2 row-cols-lg-3 -->
+      <div class="carousel" ref="carousel">
+        <div class="col-12 col-sm-8 col-md-4 col-lg-3" v-for="apartment in apartments">
+          <div v-if="apartment.sponsorships.length > 0" class="card h-100">
+            <ApartmentCard :apartment="apartment"/>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-
-  <div class="container">
-    <h1>Altri appartamenti</h1>
-    <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="col" v-if="zone === ''" v-for="apartment in apartments">
-      
-          <div class="card h-100">
-            <!-- <router-link :to="'/apartment'" class="card h-100" @click="bringMeToApartment(apartment.id, apartment.title_apartment, apartment.rooms, apartment.beds, apartment.bathrooms, apartment.sqr_meters, apartment.img_apartment, apartment.description, apartment.latitude, apartment.longitude, apartment.complete_address)"> -->
-             <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top  h-100" alt="">
-             <div class="card-body">
-              <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-              <p>
-                {{ apartment.title_apartment }}
-              </p>
-            </RouterLink>
-             </div>
-             <!-- </router-link> -->
-          </div>
-        
-        
+    </section>
+    <div class="container my-apartments">
+      <div class="row gy-2 gx-2 flex-wrap row-cols-1 row-cols-md-2 row-cols-lg-3">
+        <div class="col" v-for="apartment in apartments">
+          <ApartmentCard :apartment="apartment"/>
+        </div>
+      </div>
+      <div v-if="lastPage > 1">
+        <ul class="row paginate p-3 justify-content-center list-unstyled">
+          <li :class="page === currentPage ? 'bg-yellow-logo' : ''" class="my-page col-auto border border-dark rounded-circle m-2" v-for="(page, i) in lastPage" @click="changePage(page)">
+            {{ i+1 }}
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
+  </main>
 
 </template>
 
@@ -75,8 +57,12 @@
 import axios from 'axios'
 // import useMath from '@vueuse/math'
 import _ from 'lodash'
+import ApartmentCard from '../components/ApartmentCard.vue'
 
 export default {
+  components:{
+    ApartmentCard
+  },
   data() {
     return {
       zone:'',
@@ -91,12 +77,11 @@ export default {
   methods: {
     bringMeToApartment(id, titleApartment, rooms, beds, bathrooms, sqrMeters, imgApartment, description, latitude, longitude, completeAddress){
     },
-    changePage(n) {
-      if (n === this.currentPage) return
-      this.currentPage = n
-      this.fetchPosts()
+    changePage(page) {
+      if (page === this.currentPage) return
+      this.currentPage = page
+      this.fetchApartments()
     },
-
     search: _.debounce(async function() {
       if (!this.zone) {
         this.suggestions = []
@@ -148,6 +133,21 @@ export default {
       sessionStorage.setItem('longitude', el.position.lon);
       
     },
+    scrollCarousel(e) {
+      e.preventDefault();
+      if (e.deltaY > 0){
+        this.$refs.carousel.scrollLeft += 100;
+      } 
+      else {
+        this.$refs.carousel.scrollLeft -= 100;
+      } 
+    }
+  },
+  mounted(){
+    this.$refs.carousel.addEventListener('wheel', this.scrollCarousel);
+  },  
+  beforeMount(){
+    // this.$refs.carousel.removeEventListener('wheel', this.scrollCarousel);
   },
   created() {
     this.fetchApartments();
