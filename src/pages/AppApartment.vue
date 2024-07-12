@@ -22,7 +22,7 @@
       <div class="col">
         <div class="card p-3">
           <div class="col-lg-6 mb-3">
-            <router-link :to="'/messages'" class="btn btn-primary">Contatta il proprietario</router-link>
+            <router-link :to="{name: 'messages', params: {id: apartment.id}}" class="btn btn-primary">Contatta il proprietario</router-link>
           </div>
           <div v-if="apartment" class="card-text">
             <h5>
@@ -144,6 +144,7 @@ export default {
   },
   created() {
     this.fetchApartment()
+    console.log(this.id);
   }
 }
 </script>
