@@ -152,29 +152,35 @@
         // let json=JSON.stringify(data);
         // let post_data={json_data:json}
         // axios.post('/url',post_data)
-        this.calculateLimitsLatLon()
 
-        let data = {
-          min_lat: this.bounds.latMin,
-          max_lat: this.bounds.latMax,
-          min_lon: this.bounds.lonMin,
-          max_lon: this.bounds.lonMax,
-          activeFilters: this.activeFilters
+        if (this.latitude !== ''){
+
+          this.calculateLimitsLatLon()
+  
+          let data = {
+            min_lat: this.bounds.latMin,
+            max_lat: this.bounds.latMax,
+            min_lon: this.bounds.lonMin,
+            max_lon: this.bounds.lonMax,
+            activeFilters: this.activeFilters
+          }
+          // let json = JSON.stringify(data);
+          // let post_data = { json_data: json }
+  
+          axios.post('http://127.0.0.1:8000/api/advanced', data)
+          .then((res) => {
+            // this.services = res.data.results
+            this.apartmentsResearch = res.data.response;
+            console.log(res.data)
+          }).catch(function(error){
+            console.log('error axios', error);
+          })
+
+          return true
+        }else{
+          this.errorSearch = 'Seleziona una via suggerita'
+          return false
         }
-
-
-
-        // let json = JSON.stringify(data);
-        // let post_data = { json_data: json }
-
-        axios.post('http://127.0.0.1:8000/api/advanced', data)
-        .then((res) => {
-          // this.services = res.data.results
-          this.apartmentsResearch = res.data.response;
-          console.log(res.data)
-        }).catch(function(error){
-          console.log('error axios', error);
-        })
       },
       searchForZone(){
         this.calculateLimitsLatLon()
@@ -211,8 +217,8 @@
         console.error(error)
       }
 
-      sessionStorage.setItem('latitude', '');
-      sessionStorage.setItem('longitude', '');
+      this.latitude = ""
+      this.longitude = ""
 
       }, 500),
       selectSuggestion(el){
