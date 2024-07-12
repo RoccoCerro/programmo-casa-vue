@@ -156,7 +156,7 @@
         // axios.post('/url',post_data)
 
         if (this.latitude !== ''){
-
+          this.errorSearch = ''
           this.calculateLimitsLatLon()
   
           let data = {
