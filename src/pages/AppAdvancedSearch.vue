@@ -23,13 +23,6 @@
         </ul>
       </div>
   
-      <ul>
-        <li v-for="apartment in apartmentsResearch">
-          {{ apartment.title_apartment }}
-          <p>via: {{ apartment.complete_address }}</p>
-        </li>
-      </ul>
-  
       <div class="services">
         <button :class="('btn btn-outline-dark me-1 mb-1 service-'+service.id)" @click="toggleService(service.id), buttonToggle(service.id) " v-for="(service, index) in services">{{ service.name }}</button>
         <!-- <button @click="advancedSearch">Aggiorna</button> -->
@@ -59,6 +52,14 @@
 
       <hr>
     </div> 
+    <div class="container">
+      <ul class='row list-unstyled'>
+        <li class="col-3" v-for="apartment in apartmentsResearch">
+          {{ apartment.title_apartment }}
+          <p>via: {{ apartment.complete_address }}</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -221,7 +222,7 @@
       this.latitude = el.position.lat
       this.longitude = el.position.lon
       
-      },
+      }
     },
     mounted(){
       // this.zone = sessionStorage.getItem('zone')
@@ -259,8 +260,10 @@
 <style lang="scss" scoped>
 input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: black;
  /* Colore desiderato */ cursor: pointer; }
- /* Per Firefox */ input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
+ /* Per Firefox */ 
+input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
  /* Colore desiderato */ cursor: pointer; } 
- /* Per Internet Explorer */ input[type="range"]::-ms-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
+ /* Per Internet Explorer */ 
+input[type="range"]::-ms-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
  /* Colore desiderato */ cursor: pointer; }
 </style>
