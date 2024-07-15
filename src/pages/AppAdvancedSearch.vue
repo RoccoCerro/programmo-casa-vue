@@ -39,6 +39,13 @@
         <input v-model.number="distance" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
         <label for="customRange1" class="form-label">Inserisci la distanza in Chilometri</label>
         <input v-model.number="distance" @input="calculateLimitsLatLon" step="5" type="range" class="form-range my-input-address" id="customRange1">
+
+        <label for="number_of_rooms" class="form-lable">Inserisci la quantità di stanze</label>
+        <input v-model.number="rooms" min="1" type="number" class="form-control" id="number_of_rooms" name="number_of_rooms" placeholder="inserisci il numero di stanze">
+
+        <label for="number_of_beds" class="form-lable">Inserisci il numero di camere da letto</label>
+        <input v-model.number="beds" min="1" type="number" class="form-control" id="number_of_beds" name="number_of_beds" placeholder="inserisci il numero di camere da letto">
+
       </form>
       <div class="search-bar_solutions">
         <!-- <h4>Latitudine: </h4><span>{{ latitude }}</span>
@@ -84,6 +91,10 @@
         latitude: 0,
         longitude: 0,
         distance: 20,
+        // -----------------
+        rooms: 1,
+        beds: 1,
+        // ----------------
         buttonColors: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'],
         services: {},
         activeFilters: [],
@@ -118,8 +129,16 @@
         this.bounds.latMax = latMax;
         this.bounds.lonMin = lonMin;
         this.bounds.lonMax = lonMax;
-
       },
+
+      // -----------------------------------------------------
+      calculateRoomsAndBeds(){
+        const roomsNumber = this.rooms;
+        const bedsNumber = this.beds; 
+      },
+
+      // -----------------------------------------------------
+
       fetchServices(){
         axios.get('http://127.0.0.1:8000/api/services')
         .then((res) => {
@@ -162,11 +181,14 @@
           this.calculateLimitsLatLon()
   
           let data = {
+            
             min_lat: this.bounds.latMin,
             max_lat: this.bounds.latMax,
             min_lon: this.bounds.lonMin,
             max_lon: this.bounds.lonMax,
-            activeFilters: this.activeFilters
+            activeFilters: this.activeFilters,
+            roomsNumber: this.rooms,
+            bedsNumber: this.beds 
           }
           // let json = JSON.stringify(data);
           // let post_data = { json_data: json }
