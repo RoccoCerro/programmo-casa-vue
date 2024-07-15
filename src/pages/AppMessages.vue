@@ -24,11 +24,11 @@
     <button @click="sendMessage" class="btn btn-primary">Invia</button>
    <!-- </form> -->
 
-   <h5>Nome: </h5><p>{{ name }}</p>
+   <!-- <h5>Nome: </h5><p>{{ name }}</p>
    <h5>Cognome: </h5><p>{{ surname }}</p>
    <h5>Email: </h5><p>{{ email_sender }}</p>
    <h5>Tel: </h5><p>{{ phone_number }}</p>
-   <h5>Messaggio: </h5><p>{{ text }}</p>
+   <h5>Messaggio: </h5><p>{{ text }}</p> -->
  </div>
 
  <AppMessageSuccess v-if="responseMessage.success" :message="responseMessage" :id="id_apartment" />
