@@ -298,4 +298,7 @@ input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius
  /* Per Internet Explorer */ 
 input[type="range"]::-ms-thumb { width: 20px; height: 20px; border-radius: 50%; background: black; 
  /* Colore desiderato */ cursor: pointer; }
+ .container{
+  margin-top: 60px;
+ }
 </style>
