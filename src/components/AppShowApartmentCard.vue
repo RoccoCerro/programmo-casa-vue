@@ -14,11 +14,50 @@
         </p>
       </div>
       <section>
-        <div class="row">
-          <div class="col">
-            <img src="/public/img/servizi/Risorsa 1.svg" alt="" class="img-service"> {{apartment.rooms}}
+        <div class="row align-items-center ">
+          <div class="col-auto my-col-auto">
+            
+            <div class="flex-column">
+              <div class="col-auto my-col-auto text-center ">
+              <img class="icon-service" src="/public/img/servizi/Risorsa 1.svg" alt="">
+              </div>
+              <div class="col-auto my-col-auto my-name-icon text-center">Stanze</div>
+            </div>
+
+          </div>
+          <div class="col-auto my-col-auto">
+            {{apartment.rooms}}
+          </div>
+          <div class="col-auto my-col-auto">
+            
+            <div class="flex-column justify-content-center align-items-center align-self-center ">
+              <div class="col-auto my-col-auto text-center">
+              <img class="icon-service" src="/public/img/servizi/Risorsa 2.svg" alt="">
+              </div>
+              <div class="col-auto my-col-auto my-name-icon">Camere</div>
+            </div>
+
+          </div>
+          <div class="col-auto my-col-auto">
+            {{apartment.beds}}
+          </div>
+          <div class="col-auto my-col-auto">
+            
+            <div class="flex-column justify-content-center align-items-center align-self-center">
+              <div class="col-auto my-col-auto text-center">
+              <img class="icon-service" src="/public/img/servizi/Risorsa 4.svg" alt="">
+              </div>
+              <div class="col-auto my-col-auto my-name-icon text-center">M.Q.</div>
+            </div>
+
+          </div>
+          <div class="col-auto my-col-auto">
+            {{apartment.sqr_meters}}
           </div>
         </div>
+      </section>
+      <section class="my-services">
+        
       </section>
     </div>
   </div>
@@ -35,7 +74,17 @@
 </script>
 
 <style lang="scss" scoped>
-  .img-service{
-    width: 30px;
+  .icon-service{
+    height: 30px;
+  }
+
+  .my-name-icon{
+    font-size: 10px;
+  }
+
+  .my-col-auto{
+    padding: 0;
+    padding-left: 5px;
+    
   }
 </style>
