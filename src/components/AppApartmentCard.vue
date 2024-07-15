@@ -1,5 +1,4 @@
 <template>
-  <div class="col">
     <div class="card h-100">
       <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top  h-100" alt="">
       <div class="card-body">
@@ -11,7 +10,6 @@
       </div>
       <!-- </router-link> -->
     </div>
-  </div>
 </template>
 
 <script>
