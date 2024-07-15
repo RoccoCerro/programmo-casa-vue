@@ -1,14 +1,18 @@
 <template>
-    <div class="card h-100">
-      <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top  h-100" alt="">
-      <div class="card-body">
-        <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
-        <p>
-          {{ apartment.title_apartment }}
-        </p>
-      </RouterLink>
+    <div class="card h-100 text-center" v-if="apartment.sponsorships.length > 0">
+      <!-- mostriamo gli appartamenti in evidenza -->
+      <RouterLink :to="{ name: 'apartment.show', params: {id: apartment.id} }">
+      <div class="card-body my_card-body">
+        <img :src="'http://127.0.0.1:8000/storage/' + apartment.img_apartment" class="card-img-top img_card" alt="">
+
+        <div class="my_card-title">
+          <div class="my_title">
+            <h4>{{ apartment.title_apartment }}</h4>
+          </div>
+          <div class="my-shadow"></div>
+        </div>
       </div>
-      <!-- </router-link> -->
+    </RouterLink>
     </div>
 </template>
 
@@ -35,4 +39,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use '../style/partials/apartment-card';
+</style>
