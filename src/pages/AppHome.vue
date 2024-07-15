@@ -152,6 +152,7 @@ export default {
         .then((res) => {
           this.apartments = res.data.results.data
           this.lastPage = res.data.results.last_page
+          console.log( res.data.results)
         })
 
     },
