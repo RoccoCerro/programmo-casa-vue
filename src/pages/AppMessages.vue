@@ -1,16 +1,17 @@
 <template>
   <div v-if="!responseMessage.success" class="container">
+    <p><strong>I campi che presentano * sono obligatori</strong></p>
    <!-- <form action="" method="POST"> -->
     <div class="mb-3">
-      <label for="name" class="form-label">Inserisci il tuo Nome</label>
+      <label for="name" class="form-label">* Inserisci il tuo Nome</label>
       <input v-model.text="name" type="text" class="form-control" id="name" name="name" placeholder="Inserisci il tuo Nome">
     </div>
     <div class="mb-3">
-      <label for="surname" class="form-label">Inserisci il tuo Cognome</label>
+      <label for="surname" class="form-label">* Inserisci il tuo Cognome</label>
       <input v-model.text="surname" type="text" class="form-control" id="surname" name="surname" placeholder="Inserisci il tuo Cognome">
     </div>
     <div class="mb-3">
-      <label for="email_sender" class="form-label">Inserisci la tua Email</label>
+      <label for="email_sender" class="form-label">* Inserisci la tua Email</label>
       <input v-model.text="email_sender" type="email" class="form-control" id="email_sender" name="email_sender" placeholder="Inserisci una email valida">
     </div>
     <div class="mb-3">
@@ -18,7 +19,7 @@
       <input v-model.text="phone_number" type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Inserisci il tuo Numero di Telefono">
     </div>
     <div class="mb-3">
-      <label for="text" class="form-label">Inserisci il Messaggio per il Padrone di Casa</label>
+      <label for="text" class="form-label">* Inserisci il Messaggio per il Padrone di Casa</label>
       <textarea v-model.text="text" class="form-control" name="text" id="text" cols="30" rows="10" placeholder="Inserisci il testo del tuo messaggio"></textarea>
     </div>
     <button @click="sendMessage" class="btn btn-primary">Invia</button>
