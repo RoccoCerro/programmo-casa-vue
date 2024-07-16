@@ -21,7 +21,7 @@
                 
                 <div class="flex-column">
                   <div class="col-auto  text-center ">
-                  <img class="icon-service" src="/public/img/servizi/Risorsa 1.svg" alt="">
+                  <img class="icon-service" src="/public/img/info/info_rooms.svg" alt="">
                   </div>
                   <div class="col-auto  my-name-icon text-center">Stanze</div>
                 </div>
@@ -38,7 +38,7 @@
                 
                 <div class="flex-column">
                   <div class="col-auto  text-center ">
-                  <img class="icon-service" src="/public/img/servizi/Risorsa 1.svg" alt="">
+                  <img class="icon-service" src="/public/img/info/info_bedrooms.svg" alt="">
                   </div>
                   <div class="col-auto  my-name-icon text-center">Camere Da Letto</div>
                 </div>
@@ -55,7 +55,7 @@
                 
                 <div class="flex-column">
                   <div class="col-auto  text-center ">
-                  <img class="icon-service" src="/public/img/servizi/Risorsa 1.svg" alt="">
+                  <img class="icon-service" src="/public/img/info/info_bathrooms.svg" alt="">
                   </div>
                   <div class="col-auto  my-name-icon text-center">Bagni</div>
                 </div>
@@ -72,7 +72,7 @@
                 
                 <div class="flex-column">
                   <div class="col-auto text-center ">
-                  <img class="icon-service" src="/public/img/servizi/Risorsa 1.svg" alt="">
+                  <img class="icon-service" src="/public/img/info/info_m2.svg" alt="">
                   </div>
                   <div class="col-auto  my-name-icon text-center">M.Q.</div>
                 </div>
