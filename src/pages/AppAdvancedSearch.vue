@@ -31,10 +31,6 @@
 
     <div class="container search-bar">
       <form class="form-search-latitude my-3" action="">
-        <!-- <label for="complete_address" class="form-label">Inserisci la latitudine</label>
-        <input v-model.number="latitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
-        <label for="complete_address" class="form-label">Inserisci la longitudine</label>
-        <input v-model.number="longitude" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite"> -->
         <label for="complete_address" class="form-label">Inserisci la distanza in Chilometri</label>
         <input v-model.number="distance" @input="calculateLimitsLatLon" type="number" class="form-control my-input-address" id="complete_address" name="complete_address" placeholder="Inserisci la Via e scegli tra quelle suggerite">
         <label for="customRange1" class="form-label">Inserisci la distanza in Chilometri</label>
@@ -48,17 +44,12 @@
 
       </form>
       <div class="search-bar_solutions">
-        <!-- <h4>Latitudine: </h4><span>{{ latitude }}</span>
-        <h4>Longitudine: </h4><span>{{ longitude }}</span> -->
         <h4>Distanza: </h4><span>{{ distance }}</span>
-        <!-- <h4>Latitudine Minima: </h4><span>{{ bounds.latMin }}</span>
-        <h4>Latitudine Massima: </h4><span>{{ bounds.latMax }}</span>
-        <h4>Longitudine Minima: </h4><span>{{ bounds.lonMin }}</span>
-        <h4>Longitudine Massima: </h4><span>{{ bounds.lonMax }}</span> -->
       </div>
 
       <hr>
     </div> 
+    <AppMap/>
     <div class="container">
       <div class="row">
         <div class="col-3" v-for="apartment in apartmentsResearch"> 
@@ -74,11 +65,13 @@
   import _ from 'lodash'
   import AppApartmentCard from '../components/AppApartmentCard.vue'
   import AppApartmentCardSponsored from '../components/AppApartmentCardSponsored.vue'
+  import AppMap from '../components/AppMap.vue'
 
   export default {
     components:{
       AppApartmentCard,
-      AppApartmentCardSponsored
+      AppApartmentCardSponsored,
+      AppMap
     },
     data(){
       return{
